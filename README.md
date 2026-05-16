@@ -1,6 +1,7 @@
 # 推しログ (OshiLog)
 
 推し活の「お金」「当落戦績」「スケジュール」をブラウザ上で一元管理できる、ローカル完結型のシングルページアプリケーション（SPA）です。
+主にスマホ利用を志向していますが、PCでも閲覧・利用ともに可能です。
 
 URL：[stellular-parfait-11a86c.netlify.app](https://stellular-parfait-11a86c.netlify.app/)
 
