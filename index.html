@@ -10,73 +10,26 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
         
-        :root {
-            --accent: #ec4899;
-        }
-        
-        body {
-            font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .activity-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .activity-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-        
-        .modal {
-            animation: modalPop 0.2s ease forwards;
-        }
-        
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        
-        .section {
-            display: none;
-        }
-        
-        .section.active {
-            display: block;
-        }
-        
-        .star {
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-        
-        .star:hover {
-            transform: scale(1.2);
-        }
-        
-        .log-row {
-            transition: background-color 0.1s ease;
-        }
-        
-        .log-row:hover {
-            background-color: #fdf2f8;
-        }
-        
-        .metric-value {
-            font-variant-numeric: tabular-nums;
-        }
-
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        :root { --accent: #ec4899; }
+        body { font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .activity-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .activity-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .modal { animation: modalPop 0.2s ease forwards; }
+        @keyframes modalPop { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .section { display: none; }
+        .section.active { display: block; }
+        .star { cursor: pointer; transition: transform 0.1s ease; }
+        .star:hover { transform: scale(1.2); }
+        .log-row { transition: background-color 0.1s ease; }
+        .log-row:hover { background-color: #fdf2f8; }
+        .metric-value { font-variant-numeric: tabular-nums; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-zinc-50 text-zinc-800">
-    <header class="bg-white border-b border-zinc-200 sticky top-0 z-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-zinc-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-x-3">
                 <div class="w-11 h-11 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-200">
@@ -84,168 +37,162 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">推しログ</h1>
-                    <p class="text-xs text-zinc-500 -mt-1">OshiLog</p>
+                    <p class="text-[10px] text-zinc-500 -mt-1 font-medium">OshiLog</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-x-2">
                 <div class="relative">
-                    <select id="oshi-selector" 
-                            class="appearance-none bg-white border border-zinc-200 rounded-2xl pl-4 pr-10 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-pink-200 cursor-pointer"
-                            onchange="switchOshi()">
-                    </select>
+                    <select id="oshi-selector" class="appearance-none bg-white border border-zinc-200 rounded-2xl pl-4 pr-10 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-pink-200 cursor-pointer" onchange="switchOshi()"></select>
                     <i class="fa-solid fa-chevron-down absolute right-3 top-3 text-zinc-400 text-xs pointer-events-none"></i>
                 </div>
-                <button onclick="showAddOshiModal()" 
-                        class="flex items-center gap-x-1.5 px-3 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 rounded-2xl transition-colors">
-                    <i class="fa-solid fa-plus"></i>
-                    <span class="hidden sm:inline">推しを追加</span>
+                <button onclick="showAddOshiModal()" class="flex items-center gap-x-1.5 px-3 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 rounded-2xl transition-colors">
+                    <i class="fa-solid fa-plus"></i><span class="hidden sm:inline">推しを追加</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <div class="max-w-5xl mx-auto px-4 py-6 pb-24">
+    <div class="max-w-5xl mx-auto px-4 py-6 pb-28">
         
+        <!-- HOME SECTION -->
         <div id="section-home" class="section active">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Oshi Profile -->
                 <div class="lg:col-span-5">
-                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-zinc-100 h-full">
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-zinc-100 h-full relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-pink-50 rounded-bl-full -z-10 opacity-50"></div>
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex items-start gap-x-4">
-                                <div id="home-oshi-emoji" 
-                                     class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 flex items-center justify-center text-5xl bg-zinc-100 rounded-3xl shadow-sm overflow-hidden"></div>
+                                <div id="home-oshi-emoji" class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 flex items-center justify-center text-5xl bg-zinc-50 border border-zinc-100 rounded-3xl shadow-sm overflow-hidden"></div>
                                 <div class="pt-1">
-                                    <h2 id="home-oshi-name" class="text-2xl sm:text-3xl font-bold tracking-tight"></h2>
-                                    <p id="home-oshi-group" class="text-sm text-zinc-500 mt-1"></p>
+                                    <h2 id="home-oshi-name" class="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-800"></h2>
+                                    <p id="home-oshi-group" class="text-sm text-zinc-500 mt-1 font-medium"></p>
                                 </div>
                             </div>
                             <div class="text-right flex-shrink-0">
-                                <div class="text-xs text-zinc-500">推し歴</div>
-                                <div id="home-oshi-days" class="text-xl sm:text-2xl font-semibold text-pink-600"></div>
+                                <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">推し歴</div>
+                                <div id="home-oshi-days" class="text-xl sm:text-2xl font-bold text-pink-600 mt-0.5"></div>
                             </div>
                         </div>
-                        
                         <div class="flex items-center gap-x-2 text-sm mt-6">
-                            <div class="px-3 py-1.5 bg-pink-50 text-pink-600 rounded-full text-xs font-medium flex items-center gap-x-1.5">
-                                <i class="fa-solid fa-cake-candles"></i>
-                                <span id="home-oshi-birthday"></span>
+                            <div class="px-3 py-1.5 bg-pink-50/80 text-pink-600 rounded-xl text-xs font-semibold flex items-center gap-x-1.5 border border-pink-100/50">
+                                <i class="fa-solid fa-cake-candles"></i><span id="home-oshi-birthday"></span>
                             </div>
-                            <div onclick="showSection('settings')" class="cursor-pointer text-xs px-3 py-1.5 hover:bg-zinc-100 rounded-full flex items-center gap-x-1.5 text-zinc-500 transition-colors">
-                                <i class="fa-solid fa-edit text-xs"></i>
-                                <span>編集</span>
+                            <div onclick="showSection('settings')" class="cursor-pointer text-xs px-3 py-1.5 bg-zinc-50 hover:bg-zinc-100 border border-zinc-100 rounded-xl flex items-center gap-x-1.5 text-zinc-500 font-medium transition-colors">
+                                <i class="fa-solid fa-edit"></i><span>編集</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 
+                <!-- Quick Stats -->
                 <div class="lg:col-span-7">
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <div class="bg-white rounded-3xl p-4 border border-zinc-100">
-                            <div class="text-xs text-zinc-500 mb-1">総活動回数</div>
-                            <div id="stat-total-activities" class="text-3xl font-bold metric-value">0</div>
-                            <div class="text-emerald-500 text-xs mt-0.5">回</div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 h-full">
+                        <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-xs text-zinc-500 mb-1 font-medium">総活動回数</div>
+                            <div class="flex items-baseline gap-x-1"><div id="stat-total-activities" class="text-3xl font-bold metric-value">0</div><div class="text-emerald-500 text-xs font-bold">回</div></div>
                         </div>
-                        <div class="bg-white rounded-3xl p-4 border border-zinc-100">
-                            <div class="text-xs text-zinc-500 mb-1">総支出</div>
-                            <div id="stat-total-spent" class="text-3xl font-bold metric-value">0</div>
-                            <div class="text-rose-500 text-xs mt-0.5">円</div>
+                        <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-xs text-zinc-500 mb-1 font-medium">総支出</div>
+                            <div class="flex items-baseline gap-x-1"><div id="stat-total-spent" class="text-3xl font-bold metric-value">0</div><div class="text-rose-500 text-xs font-bold">円</div></div>
                         </div>
-                        <div class="bg-white rounded-3xl p-4 border border-zinc-100">
-                            <div class="text-xs text-zinc-500 mb-1">今月の活動</div>
-                            <div id="stat-month-activities" class="text-3xl font-bold metric-value">0</div>
-                            <div class="text-emerald-500 text-xs mt-0.5">回</div>
+                        <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-xs text-zinc-500 mb-1 font-medium">今月の活動</div>
+                            <div class="flex items-baseline gap-x-1"><div id="stat-month-activities" class="text-3xl font-bold metric-value">0</div><div class="text-emerald-500 text-xs font-bold">回</div></div>
                         </div>
-                        <div class="bg-white rounded-3xl p-4 border border-zinc-100">
-                            <div class="text-xs text-zinc-500 mb-1">今月の支出</div>
-                            <div id="stat-month-spent" class="text-3xl font-bold metric-value">0</div>
-                            <div class="text-rose-500 text-xs mt-0.5">円</div>
+                        <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
+                            <div class="text-xs text-zinc-500 mb-1 font-medium">今月の支出</div>
+                            <div class="flex items-baseline gap-x-1"><div id="stat-month-spent" class="text-3xl font-bold metric-value">0</div><div class="text-rose-500 text-xs font-bold">円</div></div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="lg:col-span-12">
-                    <div class="flex items-center justify-between mb-3 px-1">
-                        <h3 class="font-semibold text-lg flex items-center gap-x-2">
-                            <i class="fa-solid fa-clock-rotate-left text-pink-500"></i>
-                            <span>最近の推し活</span>
+                <!-- Recent Activities -->
+                <div class="lg:col-span-12 mt-2">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <h3 class="font-bold text-lg flex items-center gap-x-2 text-zinc-800">
+                            <i class="fa-solid fa-clock-rotate-left text-pink-500"></i><span>最近の推し活</span>
                         </h3>
-                        <button onclick="showSection('logs')" 
-                                class="text-sm text-pink-600 hover:text-pink-700 font-medium flex items-center gap-x-1 transition-colors">
+                        <button onclick="showSection('logs')" class="text-sm text-pink-600 hover:text-pink-700 font-bold flex items-center gap-x-1 transition-colors bg-pink-50 px-3 py-1.5 rounded-full">
                             すべて見る <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
                     </div>
-                    
-                    <div id="recent-logs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        </div>
+                    <div id="recent-logs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
             </div>
         </div>
         
+        <!-- ADD ACTIVITY SECTION -->
         <div id="section-add" class="section">
-            <div class="max-w-xl mx-auto">
-                <div class="bg-white rounded-3xl p-8 shadow-sm border border-zinc-100">
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-x-3">
-                        <i class="fa-solid fa-plus-circle text-pink-500"></i>
-                        <span>新しい活動を記録する</span>
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-zinc-100">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-x-3 text-zinc-800">
+                        <i class="fa-solid fa-plus-circle text-pink-500"></i><span>新しい活動を記録する</span>
                     </h2>
                     
                     <form id="add-activity-form" onsubmit="addActivity(event)">
-                        <div class="space-y-5">
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-700 mb-1.5">日付</label>
-                                <input type="date" id="activity-date" required class="w-full px-4 py-3 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm font-mono">
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-zinc-700 mb-2">日付</label>
+                                    <input type="date" id="activity-date" required class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 focus:bg-white text-sm font-mono transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-zinc-700 mb-2">活動の種類</label>
+                                    <select id="activity-type" required class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 focus:bg-white text-sm transition-all"></select>
+                                </div>
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-zinc-700 mb-1.5">活動の種類</label>
-                                <select id="activity-type" required class="w-full px-4 py-3 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm">
-                                    <option value="">選択してください</option>
-                                    <option value="イベント参加">イベント参加（ライブ・握手会など）</option>
-                                    <option value="グッズ購入">グッズ購入</option>
-                                    <option value="配信視聴">配信・動画視聴</option>
-                                    <option value="写真撮影">写真撮影・チェキ</option>
-                                    <option value="ファンアート">ファンアート作成</option>
-                                    <option value="その他">その他</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-700 mb-1.5">タイトル・内容</label>
-                                <input type="text" id="activity-title" required placeholder="例: 東京ドームライブ 1日目" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm">
+                                <label class="block text-sm font-bold text-zinc-700 mb-2">タイトル・内容</label>
+                                <input type="text" id="activity-title" required placeholder="例: 東京ドームライブ 1日目" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 focus:bg-white text-sm transition-all">
                             </div>
 
-                            <div class="flex items-center gap-x-2 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                <input type="checkbox" id="activity-is-planned" class="w-4 h-4 accent-pink-600" onchange="togglePlannedMode(this.checked, 'add')">
-                                <label for="activity-is-planned" class="text-sm font-medium text-zinc-700">これは予定です（未来の活動）</label>
+                            <div class="flex items-center gap-x-2 bg-pink-50/50 p-3.5 rounded-2xl border border-pink-100/50">
+                                <input type="checkbox" id="activity-is-planned" class="w-4 h-4 accent-pink-600 rounded" onchange="togglePlannedMode(this.checked, 'add')">
+                                <label for="activity-is-planned" class="text-sm font-bold text-pink-800">これは予定です（未来の活動）</label>
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-4 transition-opacity duration-200" id="add-details-container">
-                                <div>
-                                    <label class="block text-sm font-medium text-zinc-700 mb-1.5">金額（円）</label>
-                                    <div class="relative">
-                                        <input type="number" id="activity-amount" value="0" min="0" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm font-mono">
-                                        <div class="absolute right-4 top-3.5 text-zinc-400 text-sm">円</div>
+                            <div class="bg-zinc-50/50 p-5 rounded-3xl border border-zinc-100 transition-opacity duration-200 space-y-5" id="add-details-container">
+                                <div class="text-sm font-bold text-zinc-800 border-b border-zinc-200 pb-2 flex items-center gap-x-2">
+                                    <i class="fa-solid fa-coins text-zinc-400"></i>支出の内訳（円）
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">チケット等</label>
+                                        <input type="number" id="act-amt-ticket" value="0" min="0" class="w-full px-3 py-2.5 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm font-mono transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">ホテル代</label>
+                                        <input type="number" id="act-amt-hotel" value="0" min="0" class="w-full px-3 py-2.5 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm font-mono transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">交通費</label>
+                                        <input type="number" id="act-amt-transport" value="0" min="0" class="w-full px-3 py-2.5 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm font-mono transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">その他</label>
+                                        <input type="number" id="act-amt-other" value="0" min="0" class="w-full px-3 py-2.5 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm font-mono transition-all">
                                     </div>
                                 </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-zinc-700 mb-1.5">満足度</label>
-                                    <div class="flex items-center gap-x-1 pt-1" id="rating-stars"></div>
+                                <div class="pt-3 border-t border-zinc-200/60">
+                                    <label class="block text-[11px] font-bold text-zinc-500 mb-2 uppercase tracking-wider">満足度</label>
+                                    <div class="flex items-center gap-x-1" id="rating-stars"></div>
                                     <input type="hidden" id="activity-rating" value="5">
                                 </div>
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-zinc-700 mb-1.5">メモ・感想</label>
-                                <textarea id="activity-memo" rows="3" placeholder="推しがかわいかった... など" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 text-sm resize-y"></textarea>
+                                <label class="block text-sm font-bold text-zinc-700 mb-2">メモ・感想</label>
+                                <textarea id="activity-memo" rows="3" placeholder="推しが尊かった..." class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 focus:bg-white text-sm resize-y transition-all"></textarea>
                             </div>
 
-                            <div class="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
+                            <div class="bg-zinc-50/50 p-4 rounded-2xl border border-zinc-100">
                                 <div class="flex items-center justify-between mb-3">
-                                    <label class="block text-sm font-medium text-zinc-700">関連リンク（任意）</label>
-                                    <button type="button" onclick="addLinkToCurrentActivity()" class="text-xs px-3 py-1.5 bg-white border border-zinc-200 shadow-sm text-zinc-600 hover:text-pink-600 hover:border-pink-200 rounded-xl font-medium transition-colors">
-                                        <i class="fa-solid fa-plus mr-1"></i>リンク追加
+                                    <label class="block text-sm font-bold text-zinc-700">関連リンク（任意）</label>
+                                    <button type="button" onclick="addLinkToCurrentActivity()" class="text-xs px-3 py-1.5 bg-white border border-zinc-200 shadow-sm text-zinc-600 hover:text-pink-600 hover:border-pink-200 rounded-xl font-bold transition-colors">
+                                        <i class="fa-solid fa-plus mr-1"></i>追加
                                     </button>
                                 </div>
                                 <div id="activity-links-preview" class="space-y-2"></div>
@@ -253,10 +200,9 @@
                         </div>
                         
                         <div class="mt-8 flex gap-x-3">
-                            <button type="button" onclick="showSection('home')" class="flex-1 py-3.5 rounded-2xl border border-zinc-200 font-medium text-sm hover:bg-zinc-50 transition-colors">キャンセル</button>
-                            <button type="submit" class="flex-1 py-3.5 bg-pink-600 hover:bg-pink-700 transition-colors text-white rounded-2xl font-semibold text-sm flex items-center justify-center gap-x-2 shadow-sm shadow-pink-200">
-                                <i class="fa-solid fa-check"></i>
-                                <span>記録する</span>
+                            <button type="button" onclick="showSection('home')" class="flex-1 py-3.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-sm transition-colors">キャンセル</button>
+                            <button type="submit" class="flex-[2] py-3.5 bg-pink-600 hover:bg-pink-700 transition-colors text-white rounded-2xl font-bold text-sm flex items-center justify-center gap-x-2 shadow-sm shadow-pink-200">
+                                <i class="fa-solid fa-check"></i><span>記録を保存する</span>
                             </button>
                         </div>
                     </form>
@@ -264,151 +210,159 @@
             </div>
         </div>
         
+        <!-- LOGS SECTION -->
         <div id="section-logs" class="section">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-y-3 mb-4 px-1">
-                <h2 class="text-xl font-bold flex items-center gap-x-2">
-                    <i class="fa-solid fa-list text-pink-500"></i>
-                    <span>活動一覧</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-y-3 mb-5 px-1">
+                <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
+                    <i class="fa-solid fa-list text-pink-500"></i><span>活動一覧</span>
                 </h2>
-                
                 <div class="flex gap-x-2">
                     <div class="relative flex-1 sm:w-64">
-                        <input type="text" id="log-search" placeholder="検索..." onkeyup="filterLogs()" class="w-full pl-9 pr-4 py-2 text-sm border border-zinc-200 rounded-2xl focus:outline-none focus:ring-1 focus:ring-pink-200">
+                        <input type="text" id="log-search" placeholder="検索..." onkeyup="filterLogs()" class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-200 shadow-sm">
                         <i class="fa-solid fa-search absolute left-3.5 top-2.5 text-zinc-400"></i>
                     </div>
-                    <select id="log-filter-type" onchange="filterLogs()" class="px-3 py-2 text-sm border border-zinc-200 rounded-2xl focus:outline-none">
-                        <option value="">すべての種類</option>
-                        <option value="イベント参加">イベント参加</option>
-                        <option value="グッズ購入">グッズ購入</option>
-                        <option value="配信視聴">配信視聴</option>
-                        <option value="写真撮影">写真撮影</option>
-                        <option value="ファンアート">ファンアート</option>
-                        <option value="その他">その他</option>
-                    </select>
+                    <select id="log-filter-type" onchange="filterLogs()" class="px-3 py-2 text-sm bg-white border border-zinc-200 rounded-2xl focus:outline-none shadow-sm font-medium"></select>
                 </div>
             </div>
             
             <div class="bg-white rounded-3xl border border-zinc-100 overflow-hidden shadow-sm">
-                <div id="logs-list" class="divide-y divide-zinc-100 max-h-[600px] overflow-auto">
-                    </div>
+                <div id="logs-list" class="divide-y divide-zinc-100/80 max-h-[650px] overflow-auto hide-scrollbar"></div>
             </div>
         </div>
         
+        <!-- LOTTERIES SECTION (当落管理) -->
+        <div id="section-lotteries" class="section">
+            <div class="flex items-center justify-between mb-5 px-1">
+                <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
+                    <i class="fa-solid fa-ticket text-pink-500"></i><span>当落管理</span>
+                </h2>
+                <button onclick="showLotteryModal()" class="px-4 py-2 bg-white border border-pink-200 hover:bg-pink-50 text-pink-600 text-sm font-bold rounded-2xl flex items-center gap-x-2 transition-colors shadow-sm">
+                    <i class="fa-solid fa-plus"></i><span>新規登録</span>
+                </button>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="bg-white p-5 rounded-3xl mb-5 border border-zinc-100 shadow-sm">
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <select id="lottery-filter-year" onchange="renderLotteries()" class="w-full px-3 py-2 text-xs font-bold bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200"></select>
+                    <select id="lottery-filter-type" onchange="renderLotteries()" class="w-full px-3 py-2 text-xs font-bold bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200"></select>
+                    <select id="lottery-filter-place" onchange="renderLotteries()" class="w-full px-3 py-2 text-xs font-bold bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200"></select>
+                </div>
+                <div class="text-center bg-gradient-to-br from-zinc-50 to-pink-50/30 border border-zinc-100 rounded-2xl py-5 shadow-inner">
+                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-1">戦績（結果待ち除く）</div>
+                    <div class="text-4xl font-black text-zinc-800 tracking-tight" id="lottery-stats-text">0<span class="text-lg font-bold text-zinc-400 mx-1">戦</span>0<span class="text-lg font-bold text-zinc-400 mx-1">勝</span><span class="text-2xl ml-2 text-pink-600">0%</span></div>
+                </div>
+            </div>
+
+            <div id="lotteries-list" class="space-y-3 pb-4"></div>
+        </div>
+
+        <!-- STATS SECTION -->
         <div id="section-stats" class="section">
-            <h2 class="text-xl font-bold mb-5 px-1 flex items-center gap-x-2">
-                <i class="fa-solid fa-chart-line text-pink-500"></i>
-                <span>推し活統計</span>
+            <h2 class="text-xl font-bold mb-5 px-1 flex items-center gap-x-2 text-zinc-800">
+                <i class="fa-solid fa-chart-line text-pink-500"></i><span>推し活統計</span>
             </h2>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-500">総実績回数</div>
-                    <div id="stats-total-count" class="text-4xl font-bold mt-1 metric-value">0</div>
+                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">総実績回数</div>
+                    <div id="stats-total-count" class="text-4xl font-black mt-1 metric-value text-zinc-800">0</div>
                 </div>
                 <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-500">総支出額</div>
-                    <div id="stats-total-spent" class="text-4xl font-bold mt-1 text-rose-600 metric-value">¥0</div>
+                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">総支出額</div>
+                    <div id="stats-total-spent" class="text-3xl sm:text-4xl font-black mt-1 text-rose-600 metric-value truncate">¥0</div>
                 </div>
                 <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-500">平均満足度</div>
-                    <div id="stats-avg-rating" class="text-4xl font-bold mt-1 flex items-baseline">0 <span class="text-base ml-1 text-yellow-500">★</span></div>
+                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">平均満足度</div>
+                    <div id="stats-avg-rating" class="text-4xl font-black mt-1 flex items-baseline text-zinc-800">0 <span class="text-base ml-1 text-yellow-500">★</span></div>
                 </div>
                 <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-500">推し活日数</div>
-                    <div id="stats-oshi-days" class="text-4xl font-bold mt-1 metric-value">0</div>
+                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">推し活日数</div>
+                    <div id="stats-oshi-days" class="text-4xl font-black mt-1 metric-value text-zinc-800">0</div>
                 </div>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div class="lg:col-span-3 bg-white rounded-3xl p-6 border border-zinc-100 shadow-sm">
-                    <h4 class="font-semibold mb-4 text-sm flex items-center gap-x-2">
-                        <i class="fa-solid fa-chart-bar text-pink-400"></i>
-                        <span>月別支出推移</span>
+                    <h4 class="font-bold mb-4 text-sm flex items-center gap-x-2 text-zinc-800">
+                        <i class="fa-solid fa-chart-bar text-pink-400"></i><span>月別支出推移</span>
                     </h4>
                     <div class="h-72"><canvas id="monthly-chart"></canvas></div>
                 </div>
-                
                 <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-zinc-100 shadow-sm">
-                    <h4 class="font-semibold mb-4 text-sm flex items-center gap-x-2">
-                        <i class="fa-solid fa-chart-pie text-pink-400"></i>
-                        <span>活動種別内訳</span>
+                    <h4 class="font-bold mb-4 text-sm flex items-center gap-x-2 text-zinc-800">
+                        <i class="fa-solid fa-chart-pie text-pink-400"></i><span>活動種別内訳</span>
                     </h4>
                     <div class="h-72 flex items-center justify-center"><canvas id="type-pie-chart"></canvas></div>
                 </div>
             </div>
         </div>
         
+        <!-- WISHLIST SECTION -->
         <div id="section-wishlist" class="section">
-            <div class="flex items-center justify-between mb-4 px-1">
-                <h2 class="text-xl font-bold flex items-center gap-x-2">
-                    <i class="fa-solid fa-gift text-pink-500"></i>
-                    <span>ウィッシュリスト</span>
+            <div class="flex items-center justify-between mb-5 px-1">
+                <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
+                    <i class="fa-solid fa-gift text-pink-500"></i><span>ウィッシュリスト</span>
                 </h2>
-                <button onclick="showWishlistEditModal()" class="px-4 py-2 bg-white border border-pink-200 hover:bg-pink-50 text-pink-600 text-sm font-medium rounded-2xl flex items-center gap-x-2 transition-colors shadow-sm">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>追加</span>
+                <button onclick="showWishlistEditModal()" class="px-4 py-2 bg-white border border-pink-200 hover:bg-pink-50 text-pink-600 text-sm font-bold rounded-2xl flex items-center gap-x-2 transition-colors shadow-sm">
+                    <i class="fa-solid fa-plus"></i><span>追加</span>
                 </button>
             </div>
-            
-            <div id="wishlist-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                </div>
+            <div id="wishlist-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
         
+        <!-- LINKS SECTION -->
         <div id="section-links" class="section">
-            <div class="flex items-center justify-between mb-4 px-1">
-                <h2 class="text-xl font-bold flex items-center gap-x-2">
-                    <i class="fa-solid fa-link text-pink-500"></i>
-                    <span>リンク集</span>
+            <div class="flex items-center justify-between mb-5 px-1">
+                <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
+                    <i class="fa-solid fa-link text-pink-500"></i><span>リンク集</span>
                 </h2>
-                <button onclick="showLinkModal()" class="px-4 py-2 bg-white border border-pink-200 hover:bg-pink-50 text-pink-600 text-sm font-medium rounded-2xl flex items-center gap-x-2 transition-colors shadow-sm">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>リンクを追加</span>
+                <button onclick="showLinkModal()" class="px-4 py-2 bg-white border border-pink-200 hover:bg-pink-50 text-pink-600 text-sm font-bold rounded-2xl flex items-center gap-x-2 transition-colors shadow-sm">
+                    <i class="fa-solid fa-plus"></i><span>追加</span>
                 </button>
             </div>
-            
-            <div id="links-list" class="space-y-3">
-                </div>
+            <div id="links-list" class="space-y-3"></div>
         </div>
         
-        <div id="section-settings" class="section max-w-xl">
-            <div class="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm">
-                <h2 class="text-xl font-bold mb-6">推し情報の編集</h2>
-                
+        <!-- SETTINGS SECTION -->
+        <div id="section-settings" class="section max-w-xl mx-auto">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-100 shadow-sm">
+                <h2 class="text-xl font-bold mb-6 text-zinc-800">推し情報の編集</h2>
                 <div class="space-y-5">
                     <div>
-                        <label class="text-sm font-medium block mb-1.5">推し名</label>
-                        <input type="text" id="edit-oshi-name" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm">
+                        <label class="text-sm font-bold block mb-1.5 text-zinc-700">推し名</label>
+                        <input type="text" id="edit-oshi-name" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl text-sm focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all">
                     </div>
                     <div>
-                        <label class="text-sm font-medium block mb-1.5">グループ・所属</label>
-                        <input type="text" id="edit-oshi-group" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm">
+                        <label class="text-sm font-bold block mb-1.5 text-zinc-700">グループ・所属</label>
+                        <input type="text" id="edit-oshi-group" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl text-sm focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-sm font-medium block mb-1.5">誕生日</label>
-                            <input type="date" id="edit-oshi-birthday" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm font-mono">
+                            <label class="text-sm font-bold block mb-1.5 text-zinc-700">誕生日</label>
+                            <input type="date" id="edit-oshi-birthday" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl text-sm font-mono focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all">
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1.5">推し始めた日</label>
-                            <input type="date" id="edit-oshi-started" class="w-full px-4 py-3 border border-zinc-200 rounded-2xl text-sm font-mono">
+                            <label class="text-sm font-bold block mb-1.5 text-zinc-700">推し始めた日</label>
+                            <input type="date" id="edit-oshi-started" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl text-sm font-mono focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all">
                         </div>
                     </div>
                     <div>
-                        <label class="text-sm font-medium block mb-1.5">推しカラー（アクセント）</label>
+                        <label class="text-sm font-bold block mb-1.5 text-zinc-700">推しカラー（アクセント）</label>
                         <div class="flex items-center gap-x-3">
-                            <input type="color" id="edit-oshi-color" value="#ec4899" class="w-14 h-10 p-1 border border-zinc-200 rounded-xl cursor-pointer">
-                            <span class="text-xs text-zinc-500">この色がUIに反映されます</span>
+                            <input type="color" id="edit-oshi-color" value="#ec4899" class="w-14 h-12 p-1 border border-zinc-200 rounded-xl cursor-pointer bg-zinc-50">
+                            <span class="text-xs font-medium text-zinc-500">UIのアクセントカラー</span>
                         </div>
                     </div>
                     <div>
-                        <label class="text-sm font-medium block mb-1.5">アイコン絵文字</label>
-                        <input type="text" id="edit-oshi-emoji" maxlength="2" placeholder="🌟" class="w-20 text-center px-4 py-3 border border-zinc-200 rounded-2xl text-2xl">
+                        <label class="text-sm font-bold block mb-1.5 text-zinc-700">アイコン絵文字</label>
+                        <input type="text" id="edit-oshi-emoji" maxlength="2" placeholder="🌟" class="w-20 text-center px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-2xl text-2xl focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all">
                     </div>
                     <div>
-                        <label class="text-sm font-medium block mb-1.5">アイコン画像（任意）</label>
+                        <label class="text-sm font-bold block mb-1.5 text-zinc-700">アイコン画像（任意）</label>
                         <div class="flex items-center gap-x-3">
-                            <input type="file" id="edit-oshi-image" accept="image/*" class="text-sm" onchange="previewOshiImage(this)">
-                            <button type="button" onclick="removeOshiImage()" class="text-xs px-3 py-1.5 text-red-500 hover:bg-red-50 rounded-xl border border-red-200 transition-colors">画像を削除</button>
+                            <input type="file" id="edit-oshi-image" accept="image/*" class="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 transition-all cursor-pointer" onchange="previewOshiImage(this)">
+                            <button type="button" onclick="removeOshiImage()" class="text-xs px-3 py-2 text-red-500 hover:bg-red-50 rounded-xl font-bold transition-colors">削除</button>
                         </div>
                         <div id="oshi-image-preview" class="mt-3 w-20 h-20 sm:w-24 sm:h-24 rounded-3xl overflow-hidden border border-zinc-200 shadow-sm hidden">
                             <img id="oshi-image-preview-img" class="w-full h-full object-cover">
@@ -417,183 +371,211 @@
                 </div>
                 
                 <div class="mt-8 flex gap-x-3">
-                    <button onclick="saveOshiSettings()" class="flex-1 py-3.5 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold text-sm transition-colors shadow-sm">保存する</button>
-                    <button onclick="deleteCurrentOshi()" class="px-6 py-3.5 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-2xl text-sm font-medium transition-colors">この推しを削除</button>
+                    <button onclick="saveOshiSettings()" class="flex-1 py-3.5 bg-zinc-800 hover:bg-zinc-900 text-white rounded-2xl font-bold text-sm transition-colors shadow-sm">保存する</button>
+                    <button onclick="deleteCurrentOshi()" class="px-5 py-3.5 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-2xl text-sm font-bold transition-colors">推しを削除</button>
                 </div>
             </div>
             
-            <div class="mt-6 text-center space-y-3">
-                <button onclick="exportData()" class="text-xs text-zinc-500 hover:text-zinc-700 flex items-center gap-x-1 mx-auto transition-colors">
-                    <i class="fa-solid fa-download"></i><span>データをJSONでエクスポート</span>
-                </button>
-                <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-600 flex items-center gap-x-1 mx-auto transition-colors">
-                    <i class="fa-solid fa-trash"></i><span>すべてのデータをクリア（初期化）</span>
+            <div class="mt-8 text-center space-y-4">
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <button onclick="exportData()" class="text-xs font-bold text-zinc-500 hover:text-zinc-700 flex items-center justify-center gap-x-1 transition-colors bg-zinc-100 hover:bg-zinc-200 px-4 py-2 rounded-full w-full sm:w-auto">
+                        <i class="fa-solid fa-download"></i><span>エクスポート</span>
+                    </button>
+                    <input type="file" id="import-data-file" accept=".json" class="hidden" onchange="importData(event)">
+                    <button onclick="document.getElementById('import-data-file').click()" class="text-xs font-bold text-zinc-500 hover:text-pink-600 flex items-center justify-center gap-x-1 transition-colors bg-zinc-100 hover:bg-pink-50 border border-transparent hover:border-pink-200 px-4 py-2 rounded-full w-full sm:w-auto">
+                        <i class="fa-solid fa-upload"></i><span>インポート (復元)</span>
+                    </button>
+                </div>
+                <button onclick="clearAllData()" class="text-xs font-bold text-red-400 hover:text-red-600 flex items-center gap-x-1 mx-auto transition-colors px-4 py-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i><span>すべてのデータをクリア（初期化）</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="link-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-md p-6 modal shadow-2xl">
-            <h3 class="font-bold text-lg mb-4" id="link-modal-title">リンクを追加</h3>
+    <!-- Modals -->
+    <!-- Lottery Add/Edit Modal -->
+    <div id="lottery-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal shadow-2xl">
+            <h3 class="font-bold text-xl mb-5 text-zinc-800 flex items-center gap-x-2"><i class="fa-solid fa-ticket text-pink-500"></i><span id="lottery-modal-title">当落の登録</span></h3>
             <div class="space-y-4">
                 <div>
-                    <label class="text-sm font-medium">タイトル</label>
-                    <input type="text" id="link-title" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm" placeholder="公式サイト">
+                    <label class="text-xs font-bold text-zinc-500 mb-1.5 block uppercase">イベント名</label>
+                    <input type="text" id="lottery-event" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none" placeholder="例: 全国ツアー2026">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-zinc-500 mb-1.5 block uppercase">公演日 (基準日)</label>
+                        <input type="date" id="lottery-date" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-zinc-500 mb-1.5 block uppercase">種類</label>
+                        <select id="lottery-type" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none"></select>
+                    </div>
                 </div>
                 <div>
-                    <label class="text-sm font-medium">URL</label>
-                    <input type="url" id="link-url" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm" placeholder="https://example.com">
+                    <label class="text-xs font-bold text-zinc-500 mb-1.5 block uppercase">場所</label>
+                    <div class="flex gap-x-2">
+                        <select id="lottery-place-select" onchange="handlePlaceSelect(this)" class="flex-1 px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none"></select>
+                    </div>
                 </div>
-                <div>
-                    <label class="text-sm font-medium">メモ（任意）</label>
-                    <input type="text" id="link-memo" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm" placeholder="便利なリンク">
+                <div class="pt-2 border-t border-zinc-100">
+                    <label class="text-xs font-bold text-zinc-500 mb-2 block uppercase">ステータス</label>
+                    <select id="lottery-status" class="w-full px-4 py-3 bg-white border-2 border-zinc-200 rounded-xl text-base font-bold focus:ring-2 focus:ring-pink-200 outline-none text-zinc-800">
+                        <option value="waiting">🔄 結果待ち</option>
+                        <option value="won">🎉 当選</option>
+                        <option value="lost">💔 落選</option>
+                    </select>
                 </div>
             </div>
-            <div class="flex gap-x-3 mt-6">
-                <button onclick="hideLinkModal()" class="flex-1 py-3 rounded-2xl border text-sm font-medium hover:bg-zinc-50 transition">キャンセル</button>
-                <button onclick="saveLink()" class="flex-1 py-3 bg-pink-600 hover:bg-pink-700 transition text-white rounded-2xl text-sm font-semibold">保存する</button>
+            <div class="flex gap-x-3 mt-8">
+                <button onclick="hideLotteryModal()" class="flex-1 py-3.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-sm transition-colors">キャンセル</button>
+                <button onclick="saveLottery()" class="flex-[2] py-3.5 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-bold text-sm transition-colors shadow-sm shadow-pink-200">保存する</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Other Modals (Link, Wishlist, Activity Detail) -->
+    <div id="link-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal shadow-2xl">
+            <h3 class="font-bold text-xl mb-5" id="link-modal-title">リンクを追加</h3>
+            <div class="space-y-4">
+                <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">タイトル</label><input type="text" id="link-title" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">URL</label><input type="url" id="link-url" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">メモ（任意）</label><input type="text" id="link-memo" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"></div>
+            </div>
+            <div class="flex gap-x-3 mt-8"><button onclick="hideLinkModal()" class="flex-1 py-3.5 rounded-2xl bg-zinc-100 text-zinc-700 font-bold text-sm">キャンセル</button><button onclick="saveLink()" class="flex-[2] py-3.5 bg-pink-600 text-white rounded-2xl font-bold text-sm">保存する</button></div>
         </div>
     </div>
 
     <div id="wishlist-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-md p-6 modal shadow-2xl">
-            <h3 class="font-bold text-lg mb-4" id="wishlist-modal-title">欲しいものを追加</h3>
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal shadow-2xl">
+            <h3 class="font-bold text-xl mb-5" id="wishlist-modal-title">欲しいものを追加</h3>
             <div class="space-y-4">
-                <div>
-                    <label class="text-sm font-medium">商品名・内容</label>
-                    <input type="text" id="wishlist-item" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm" placeholder="アクリルスタンド">
-                </div>
-                <div>
-                    <label class="text-sm font-medium">リンクURL（任意）</label>
-                    <input type="url" id="wishlist-url" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm" placeholder="https://...">
-                </div>
+                <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">商品名・内容</label><input type="text" id="wishlist-item" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">リンクURL（任意）</label><input type="url" id="wishlist-url" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-sm font-medium">予想価格（円）</label>
-                        <input type="number" id="wishlist-price" value="3500" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm font-mono">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium">優先度</label>
-                        <select id="wishlist-priority" class="mt-1 w-full px-4 py-2.5 border border-zinc-200 rounded-2xl text-sm">
-                            <option value="3">高</option>
-                            <option value="2" selected>中</option>
-                            <option value="1">低</option>
-                        </select>
-                    </div>
+                    <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">予想価格（円）</label><input type="number" id="wishlist-price" value="0" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                    <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">優先度</label><select id="wishlist-priority" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"><option value="3">高</option><option value="2" selected>中</option><option value="1">低</option></select></div>
                 </div>
             </div>
-            <div class="flex gap-x-3 mt-6">
-                <button onclick="hideWishlistModal()" class="flex-1 py-3 rounded-2xl border text-sm font-medium hover:bg-zinc-50 transition">キャンセル</button>
-                <button onclick="saveWishlist()" class="flex-1 py-3 bg-pink-600 hover:bg-pink-700 transition text-white rounded-2xl text-sm font-semibold">保存する</button>
-            </div>
+            <div class="flex gap-x-3 mt-8"><button onclick="hideWishlistModal()" class="flex-1 py-3.5 rounded-2xl bg-zinc-100 text-zinc-700 font-bold text-sm">キャンセル</button><button onclick="saveWishlist()" class="flex-[2] py-3.5 bg-pink-600 text-white rounded-2xl font-bold text-sm">保存する</button></div>
         </div>
     </div>
 
     <div id="wishlist-detail-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-md p-6 modal relative shadow-2xl">
-            <button onclick="hideWishlistDetailModal()" class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-zinc-100 rounded-full text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700 transition-colors">
-                <i class="fa-solid fa-times"></i>
-            </button>
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal relative shadow-2xl">
+            <button onclick="hideWishlistDetailModal()" class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-zinc-100 rounded-full text-zinc-500 hover:bg-zinc-200 transition-colors"><i class="fa-solid fa-times"></i></button>
             <div id="wishlist-detail-content" class="mt-2"></div>
         </div>
     </div>
 
-    <div id="activity-detail-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-md p-6 modal max-h-[90vh] overflow-y-auto relative shadow-2xl">
-            <button onclick="hideActivityDetailModal()" class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-zinc-100 rounded-full text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700 transition-colors z-10">
-                <i class="fa-solid fa-times"></i>
-            </button>
+    <div id="activity-detail-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity py-10">
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal max-h-full overflow-y-auto relative shadow-2xl hide-scrollbar">
+            <button onclick="hideActivityDetailModal()" class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-zinc-100 rounded-full text-zinc-500 hover:bg-zinc-200 transition-colors z-10"><i class="fa-solid fa-times"></i></button>
             <div id="activity-detail-content" class="mt-2 text-sm"></div>
         </div>
     </div>
     
-    <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-zinc-900/95 text-white text-sm px-5 py-3 rounded-3xl shadow-xl flex items-center gap-x-2 z-[200] transition-opacity">
-        <i class="fa-solid fa-check-circle text-pink-400"></i>
-        <span id="toast-message"></span>
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-28 left-1/2 -translate-x-1/2 bg-zinc-800 text-white text-sm font-bold px-6 py-3.5 rounded-full shadow-xl flex items-center gap-x-2 z-[200] transition-opacity">
+        <i class="fa-solid fa-circle-check text-pink-400 text-lg"></i><span id="toast-message"></span>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-zinc-200 z-[65] shadow-[0_-4px_15px_-5px_rgba(0,0,0,0.05)] pb-safe">
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-zinc-200/80 z-[65] pb-safe">
         <div class="max-w-5xl mx-auto">
-            <div class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory items-center h-[64px] px-2 text-xs gap-x-1 justify-between sm:justify-start">
-                <button id="nav-home" onclick="showSection('home')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-home text-[20px] mb-1"></i><span class="text-[10px] font-medium">ホーム</span>
+            <div class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory items-center h-[68px] px-1 text-xs justify-between sm:justify-start">
+                <button id="nav-home" onclick="showSection('home')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-home text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">ホーム</span>
                 </button>
-                <button id="nav-add" onclick="showSection('add')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-plus-circle text-[20px] mb-1"></i><span class="text-[10px] font-medium">記録</span>
+                <button id="nav-add" onclick="showSection('add')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-plus-circle text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">記録</span>
                 </button>
-                <button id="nav-logs" onclick="showSection('logs')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-list text-[20px] mb-1"></i><span class="text-[10px] font-medium">活動</span>
+                <button id="nav-logs" onclick="showSection('logs')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-list text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">活動</span>
                 </button>
-                <button id="nav-stats" onclick="showSection('stats')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-chart-pie text-[20px] mb-1"></i><span class="text-[10px] font-medium">統計</span>
+                <button id="nav-lotteries" onclick="showSection('lotteries')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-ticket text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">当落</span>
                 </button>
-                <button id="nav-wishlist" onclick="showSection('wishlist')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-gift text-[20px] mb-1"></i><span class="text-[10px] font-medium">欲しい</span>
+                <button id="nav-stats" onclick="showSection('stats')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-chart-pie text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">統計</span>
                 </button>
-                <button id="nav-links" onclick="showSection('links')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-link text-[20px] mb-1"></i><span class="text-[10px] font-medium">リンク</span>
+                <button id="nav-wishlist" onclick="showSection('wishlist')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-gift text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">欲しい</span>
                 </button>
-                <button id="nav-settings" onclick="showSection('settings')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[64px] snap-start text-zinc-500 transition-colors">
-                    <i class="fa-solid fa-cog text-[20px] mb-1"></i><span class="text-[10px] font-medium">設定</span>
+                <button id="nav-links" onclick="showSection('links')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-link text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">リンク</span>
+                </button>
+                <button id="nav-settings" onclick="showSection('settings')" class="nav-btn flex-1 sm:flex-none flex flex-col items-center justify-center min-w-[60px] snap-start text-zinc-400 transition-colors group">
+                    <i class="fa-solid fa-cog text-[20px] mb-1 group-active:scale-95 transition-transform"></i><span class="text-[10px] font-bold">設定</span>
                 </button>
             </div>
         </div>
     </nav>
 
     <script>
-        // サニタイズ（脆弱性対策）関数
         function escapeHTML(str) {
             if (!str) return '';
-            return str.replace(/[&<>'"]/g, tag => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-            }[tag]));
+            return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
         }
 
-        // Data management
-        let data = { oshis: [], activities: [], wishlist: [], links: [] };
+        const ACTIVITY_TYPES = ['ライブ', '握手会等', 'グッズ購入', '配信・動画視聴', '映画鑑賞', '舞台鑑賞', '聖地訪問', 'ショップ訪問', 'ファンアート作成', 'その他'];
+        const LOTTERY_STATUS_MAP = { waiting: '🔄 結果待ち', won: '🎉 当選', lost: '💔 落選' };
+
+        let data = { oshis: [], activities: [], wishlist: [], links: [], lotteries: [] };
         let currentOshiId = null;
         let currentRating = 5;
         let monthlyChart = null;
         let typePieChart = null;
         let currentActivityLinks = [];
-        let editingActivityLinksTemp = []; // 編集画面の一時的なリンク保持用
+        let editingActivityLinksTemp = [];
         
         let editingActivityId = null;
         let editingLinkId = null;
         let editingWishlistId = null;
+        let editingLotteryId = null;
+        let pendingLotteryIdForActivity = null;
+
+        function getTotalAmount(amounts) {
+            if(!amounts) return 0;
+            return (parseInt(amounts.ticket)||0) + (parseInt(amounts.hotel)||0) + (parseInt(amounts.transport)||0) + (parseInt(amounts.other)||0);
+        }
+
+        function migrateData() {
+            if (!data.lotteries) data.lotteries = [];
+            data.activities.forEach(a => {
+                if (a.amount !== undefined) {
+                    a.amounts = { ticket: a.amount, hotel: 0, transport: 0, other: 0 };
+                    delete a.amount;
+                }
+                if (a.type === '写真撮影') a.type = '握手会等';
+            });
+        }
 
         function loadData() {
-            const saved = localStorage.getItem('oshilog_data');
+            const saved = localStorage.getItem('oshilog_data_v3');
             if (saved) {
                 data = JSON.parse(saved);
-                if (data.schedules && data.schedules.length > 0) {
-                    data.schedules.forEach(s => {
-                        data.activities.push({
-                            id: 'act_' + Date.now() + Math.random(),
-                            oshiId: s.oshiId, date: s.date, type: 'その他', title: s.title,
-                            amount: 0, memo: s.memo || '', rating: 5, isPlanned: !s.isCompleted, links: s.links || []
-                        });
-                    });
-                    delete data.schedules;
-                    saveData();
-                }
+                migrateData();
             } else {
                 initSampleData();
             }
             if (data.oshis.length > 0 && !currentOshiId) currentOshiId = data.oshis[0].id;
+            
+            // Setup Type Selects
+            const typeOpts = '<option value="">選択してください</option>' + ACTIVITY_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
+            document.getElementById('activity-type').innerHTML = typeOpts;
+            document.getElementById('lottery-type').innerHTML = typeOpts;
+            document.getElementById('log-filter-type').innerHTML = '<option value="">すべての種類</option>' + ACTIVITY_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
         }
         
-        function saveData() { localStorage.setItem('oshilog_data', JSON.stringify(data)); }
+        function saveData() { localStorage.setItem('oshilog_data_v3', JSON.stringify(data)); }
         
         function initSampleData() {
             const sampleOshiId = Date.now().toString();
-            data.oshis = [{
-                id: sampleOshiId, name: "推しの名前", group: "", birthday: "",
-                started: new Date().toISOString().split('T')[0], color: "#ec4899", emoji: "❤️", iconImage: null
-            }];
-            data.activities = []; data.wishlist = []; data.links = [];
+            data.oshis = [{ id: sampleOshiId, name: "推しの名前", group: "", birthday: "", started: new Date().toISOString().split('T')[0], color: "#ec4899", emoji: "❤️", iconImage: null }];
+            data.activities = []; data.wishlist = []; data.links = []; data.lotteries = [];
             currentOshiId = sampleOshiId;
             saveData();
         }
@@ -605,17 +587,13 @@
             select.innerHTML = '';
             data.oshis.forEach(oshi => {
                 const option = document.createElement('option');
-                option.value = oshi.id;
-                option.textContent = `${oshi.emoji || '❤️'} ${oshi.name}`;
+                option.value = oshi.id; option.textContent = `${oshi.emoji || '❤️'} ${oshi.name}`;
                 if (oshi.id === currentOshiId) option.selected = true;
                 select.appendChild(option);
             });
         }
         
-        function switchOshi() {
-            currentOshiId = document.getElementById('oshi-selector').value;
-            refreshAll();
-        }
+        function switchOshi() { currentOshiId = document.getElementById('oshi-selector').value; refreshAll(); }
         
         function showSection(section) {
             document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
@@ -623,17 +601,16 @@
             if (target) target.classList.add('active');
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-pink-600');
-                btn.classList.add('text-zinc-500');
+                btn.classList.remove('text-pink-600'); btn.classList.add('text-zinc-400');
             });
             const activeNav = document.getElementById('nav-' + section);
             if (activeNav) {
-                activeNav.classList.remove('text-zinc-500');
-                activeNav.classList.add('text-pink-600');
+                activeNav.classList.remove('text-zinc-400'); activeNav.classList.add('text-pink-600');
             }
             
             if (section === 'home') renderHome();
             if (section === 'logs') renderLogs();
+            if (section === 'lotteries') renderLotteries();
             if (section === 'stats') renderStats();
             if (section === 'wishlist') renderWishlist();
             if (section === 'links') renderLinks();
@@ -642,705 +619,600 @@
             window.scrollTo(0, 0);
         }
 
-        // ===== Links =====
-        function renderLinks() {
-            const container = document.getElementById('links-list');
-            if (!container) return;
-            container.innerHTML = '';
-            const currentLinks = (data.links || []).filter(l => l.oshiId === currentOshiId);
-
-            if (currentLinks.length === 0) {
-                container.innerHTML = `<div class="bg-white border border-dashed border-zinc-200 rounded-3xl p-8 text-center text-zinc-500">まだリンクがありません</div>`;
-                return;
-            }
-
-            currentLinks.forEach(link => {
-                const div = document.createElement('div');
-                div.className = 'bg-white border border-zinc-100 rounded-2xl p-4 flex items-center justify-between shadow-sm';
-                div.innerHTML = `
-                    <div class="flex-1 min-w-0">
-                        <a href="${escapeHTML(link.url)}" target="_blank" class="font-medium text-pink-600 hover:underline flex items-center gap-x-2 w-fit">
-                            <span class="truncate">${escapeHTML(link.title)}</span>
-                            <i class="fa-solid fa-external-link-alt text-[10px]"></i>
-                        </a>
-                        ${link.memo ? `<div class="text-xs text-zinc-500 mt-1 truncate">${escapeHTML(link.memo)}</div>` : ''}
-                    </div>
-                    <div class="flex gap-x-1 ml-4 flex-shrink-0">
-                        <button onclick="showLinkModal('${link.id}', event)" class="text-zinc-400 hover:text-pink-600 p-2 transition-colors"><i class="fa-solid fa-edit"></i></button>
-                        <button onclick="deleteLink('${link.id}', event)" class="text-zinc-300 hover:text-red-500 p-2 transition-colors"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function showLinkModal(id = null, event = null) {
-            if (event) event.stopImmediatePropagation();
-            editingLinkId = id;
-            
-            const titleEl = document.getElementById('link-modal-title');
-            if (id) {
-                titleEl.textContent = 'リンクを編集';
-                const link = data.links.find(l => l.id === id);
-                document.getElementById('link-title').value = link.title;
-                document.getElementById('link-url').value = link.url;
-                document.getElementById('link-memo').value = link.memo || '';
-            } else {
-                titleEl.textContent = 'リンクを追加';
-                document.getElementById('link-title').value = '';
-                document.getElementById('link-url').value = '';
-                document.getElementById('link-memo').value = '';
-            }
-
-            const modal = document.getElementById('link-modal');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-        }
-
-        function hideLinkModal() {
-            document.getElementById('link-modal').classList.remove('flex');
-            document.getElementById('link-modal').classList.add('hidden');
-            editingLinkId = null;
-        }
-
-        function saveLink() {
-            const title = document.getElementById('link-title').value.trim();
-            const url = document.getElementById('link-url').value.trim();
-            const memo = document.getElementById('link-memo').value.trim();
-
-            if (!title || !url) return alert('タイトルとURLは必須です');
-
-            if (editingLinkId) {
-                const link = data.links.find(l => l.id === editingLinkId);
-                if (link) { link.title = title; link.url = url; link.memo = memo; showToast('リンクを更新しました'); }
-            } else {
-                data.links.push({ id: 'link_' + Date.now(), oshiId: currentOshiId, title: title, url: url, memo: memo });
-                showToast('リンクを追加しました');
-            }
-
-            saveData(); hideLinkModal(); renderLinks();
-        }
-
-        function deleteLink(id, event) {
-            event.stopImmediatePropagation();
-            if (!confirm('削除しますか？')) return;
-            data.links = data.links.filter(l => l.id !== id);
-            saveData(); renderLinks();
-        }
-
-        // ===== Home =====
+        /* ===== HOME ===== */
         function renderHome() {
-            const oshi = getCurrentOshi();
-            if (!oshi) return;
+            const oshi = getCurrentOshi(); if (!oshi) return;
+            document.getElementById('home-oshi-emoji').innerHTML = oshi.iconImage ? `<img src="${escapeHTML(oshi.iconImage)}" class="w-full h-full object-cover">` : escapeHTML(oshi.emoji || '❤️');
+            document.getElementById('home-oshi-name').textContent = oshi.name; document.getElementById('home-oshi-group').textContent = oshi.group || '';
+            const diffDays = Math.ceil(Math.abs(new Date() - new Date(oshi.started)) / (1000 * 3600 * 24));
+            document.getElementById('home-oshi-days').innerHTML = `${diffDays}<span class="text-[10px] sm:text-xs font-bold text-zinc-400 ml-1">日目</span>`;
+            document.getElementById('home-oshi-birthday').innerHTML = oshi.birthday ? `${new Date(oshi.birthday).getMonth() + 1}月${new Date(oshi.birthday).getDate()}日` : '未設定';
             
-            const emojiContainer = document.getElementById('home-oshi-emoji');
-            emojiContainer.innerHTML = oshi.iconImage ? `<img src="${escapeHTML(oshi.iconImage)}" class="w-full h-full object-cover">` : escapeHTML(oshi.emoji || '❤️');
-            document.getElementById('home-oshi-name').textContent = oshi.name;
-            document.getElementById('home-oshi-group').textContent = oshi.group || '';
+            const oshiActs = data.activities.filter(a => a.oshiId === currentOshiId && !a.isPlanned);
+            const thisMonth = new Date().getMonth(); const thisYear = new Date().getFullYear();
+            const monthActs = oshiActs.filter(a => new Date(a.date).getMonth() === thisMonth && new Date(a.date).getFullYear() === thisYear);
             
-            const diffDays = Math.ceil(Math.abs(new Date() - new Date(oshi.started)) / (1000 * 60 * 60 * 24));
-            document.getElementById('home-oshi-days').innerHTML = `${diffDays}<span class="text-[10px] sm:text-xs font-normal text-zinc-500 ml-1">日目</span>`;
-            
-            const bdayEl = document.getElementById('home-oshi-birthday');
-            bdayEl.innerHTML = oshi.birthday ? `${new Date(oshi.birthday).getMonth() + 1}月${new Date(oshi.birthday).getDate()}日` : '未設定';
-            
-            const oshiActivities = data.activities.filter(a => a.oshiId === currentOshiId && !a.isPlanned);
-            const thisMonth = new Date().getMonth();
-            const thisYear = new Date().getFullYear();
-            const monthActs = oshiActivities.filter(a => new Date(a.date).getMonth() === thisMonth && new Date(a.date).getFullYear() === thisYear);
-            
-            document.getElementById('stat-total-activities').textContent = oshiActivities.length;
-            document.getElementById('stat-total-spent').textContent = oshiActivities.reduce((s, a) => s + (a.amount || 0), 0).toLocaleString();
+            document.getElementById('stat-total-activities').textContent = oshiActs.length;
+            document.getElementById('stat-total-spent').textContent = oshiActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString();
             document.getElementById('stat-month-activities').textContent = monthActs.length;
-            document.getElementById('stat-month-spent').textContent = monthActs.reduce((s, a) => s + (a.amount || 0), 0).toLocaleString();
+            document.getElementById('stat-month-spent').textContent = monthActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString();
             
-            const recentContainer = document.getElementById('recent-logs');
-            recentContainer.innerHTML = '';
-            const allOshiActs = data.activities.filter(a => a.oshiId === currentOshiId).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
-            
-            if (allOshiActs.length === 0) {
-                recentContainer.innerHTML = `<div class="col-span-full bg-white border border-dashed border-zinc-200 rounded-3xl p-8 text-center text-zinc-500">まだ活動が記録されていません</div>`;
-            } else {
-                allOshiActs.forEach(act => recentContainer.appendChild(createActivityCard(act, true)));
-            }
+            const rc = document.getElementById('recent-logs'); rc.innerHTML = '';
+            const allActs = data.activities.filter(a => a.oshiId === currentOshiId).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+            if (!allActs.length) { rc.innerHTML = `<div class="col-span-full bg-zinc-50 border border-dashed border-zinc-200 rounded-3xl p-8 text-center text-sm font-bold text-zinc-400">まだ活動がありません</div>`; } 
+            else { allActs.forEach(act => rc.appendChild(createActivityCard(act, true))); }
         }
-        
-        function createActivityCard(activity, isHomeCard = false) {
+
+        function createActivityCard(act, isHomeCard = false) {
             const div = document.createElement('div');
-            div.className = `activity-card bg-white border border-zinc-100 rounded-2xl p-4 cursor-pointer relative ${activity.isPlanned ? 'opacity-80 bg-zinc-50/50' : ''}`;
-            div.onclick = () => {
-                if (isHomeCard) { showSection('logs'); setTimeout(() => showActivityDetail(activity.id), 100); }
-                else { showActivityDetail(activity.id); }
-            };
-            
-            const dateStr = `${new Date(activity.date).getMonth() + 1}/${new Date(activity.date).getDate()}`;
-            const plannedBadge = activity.isPlanned ? `<span class="text-[10px] px-1.5 py-0.5 bg-zinc-200 text-zinc-600 rounded">予定</span>` : '';
-            
-            let stars = '';
-            if (!activity.isPlanned) {
-                for (let i = 1; i <= 5; i++) stars += `<i class="fa-solid fa-star ${i <= activity.rating ? 'text-yellow-400' : 'text-zinc-200'} text-[10px]"></i>`;
-            }
-            
+            div.className = `activity-card bg-white border border-zinc-100 rounded-2xl p-4 cursor-pointer relative ${act.isPlanned ? 'opacity-80 bg-zinc-50/50' : ''}`;
+            div.onclick = () => { if (isHomeCard) { showSection('logs'); setTimeout(() => showActivityDetail(act.id), 100); } else { showActivityDetail(act.id); } };
+            const dStr = `${new Date(act.date).getMonth() + 1}/${new Date(act.date).getDate()}`;
+            const b = act.isPlanned ? `<span class="text-[9px] px-1.5 py-0.5 bg-zinc-200 text-zinc-600 rounded font-bold">予定</span>` : '';
+            let stars = ''; if (!act.isPlanned) { for (let i=1; i<=5; i++) stars += `<i class="fa-solid fa-star ${i<=act.rating?'text-yellow-400':'text-zinc-200'} text-[10px]"></i>`; }
             div.innerHTML = `
                 <div class="flex justify-between items-start">
                     <div class="flex-1 pr-2 min-w-0">
-                        <div class="text-xs text-zinc-400 flex items-center gap-x-1 font-mono">${dateStr} ${plannedBadge}</div>
-                        <div class="font-semibold mt-0.5 text-sm truncate">${escapeHTML(activity.title)}</div>
-                        <div class="text-[10px] px-2 py-0.5 bg-zinc-100 text-zinc-600 w-fit rounded mt-1">${escapeHTML(activity.type)}</div>
+                        <div class="text-[11px] text-zinc-400 flex items-center gap-x-1.5 font-mono font-bold">${dStr} ${b}</div>
+                        <div class="font-bold mt-1 text-sm text-zinc-800 truncate">${escapeHTML(act.title)}</div>
+                        <div class="text-[10px] px-2 py-0.5 bg-zinc-100 text-zinc-500 font-bold w-fit rounded mt-1.5">${escapeHTML(act.type)}</div>
                     </div>
                     <div class="text-right flex-shrink-0">
-                        ${!activity.isPlanned ? `<div class="font-mono text-xs font-medium">${activity.amount.toLocaleString()}円</div><div class="mt-0.5">${stars}</div>` : ''}
+                        ${!act.isPlanned ? `<div class="font-mono text-xs font-bold text-pink-700">${getTotalAmount(act.amounts).toLocaleString()}円</div><div class="mt-1">${stars}</div>` : ''}
                     </div>
-                </div>
-            `;
+                </div>`;
             return div;
         }
 
-        // ===== Add & Edit Activities =====
+        /* ===== ADD ACTIVITY ===== */
         function togglePlannedMode(isPlanned, prefix) {
-            const container = document.getElementById(`${prefix}-details-container`);
-            if (!container) return;
-            if (isPlanned) { container.style.opacity = '0.3'; container.style.pointerEvents = 'none'; } 
-            else { container.style.opacity = '1'; container.style.pointerEvents = 'auto'; }
+            const c = document.getElementById(`${prefix}-details-container`); if (!c) return;
+            if (isPlanned) { c.style.opacity = '0.3'; c.style.pointerEvents = 'none'; } else { c.style.opacity = '1'; c.style.pointerEvents = 'auto'; }
         }
-
-        function addActivity(e) {
-            e.preventDefault();
-            const date = document.getElementById('activity-date').value;
-            const type = document.getElementById('activity-type').value;
-            const title = document.getElementById('activity-title').value.trim();
-            const isPlanned = document.getElementById('activity-is-planned').checked;
-            const amount = isPlanned ? 0 : (parseInt(document.getElementById('activity-amount').value) || 0);
-            const memo = document.getElementById('activity-memo').value.trim();
-            
-            if (!date || !type || !title) return;
-            
-            data.activities.push({
-                id: 'act_' + Date.now(), oshiId: currentOshiId, date: date, type: type, title: title,
-                amount: amount, memo: memo, rating: isPlanned ? 5 : currentRating, isPlanned: isPlanned,
-                links: currentActivityLinks || []
-            });
-            
-            saveData();
-            document.getElementById('add-activity-form').reset();
-            currentRating = 5; updateRatingStars(); currentActivityLinks = []; renderActivityLinksPreview();
-            togglePlannedMode(false, 'add');
-            
-            showToast('活動を記録しました！');
-            setTimeout(() => showSection('logs'), 300);
-        }
-
         function setupRatingStars() {
-            const container = document.getElementById('rating-stars');
-            container.innerHTML = '';
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement('i');
-                star.className = `fa-solid fa-star text-2xl star ${i <= currentRating ? 'text-yellow-400' : 'text-zinc-200'}`;
-                star.onclick = () => { currentRating = i; document.getElementById('activity-rating').value = i; updateRatingStars(); };
-                container.appendChild(star);
+            const c = document.getElementById('rating-stars'); c.innerHTML = '';
+            for (let i=1; i<=5; i++) {
+                const s = document.createElement('i'); s.className = `fa-solid fa-star text-2xl star ${i<=currentRating?'text-yellow-400':'text-zinc-200'}`;
+                s.onclick = () => { currentRating = i; document.getElementById('activity-rating').value = i; updateRatingStars(); };
+                c.appendChild(s);
             }
         }
-        function updateRatingStars() {
-            document.querySelectorAll('#rating-stars .star').forEach((star, i) => {
-                star.className = `fa-solid fa-star text-2xl star ${i < currentRating ? 'text-yellow-400' : 'text-zinc-200'}`;
-            });
-        }
-
+        function updateRatingStars() { document.querySelectorAll('#rating-stars .star').forEach((s, i) => { s.className = `fa-solid fa-star text-2xl star ${i<currentRating?'text-yellow-400':'text-zinc-200'}`; }); }
+        
         function addLinkToCurrentActivity() {
-            const title = prompt('リンクのタイトル'); if (!title) return;
-            const url = prompt('URL'); if (!url) return;
-            currentActivityLinks.push({ id: 'lnk_' + Date.now(), title: title.trim(), url: url.trim() });
-            renderActivityLinksPreview();
+            const t = prompt('リンクのタイトル'); if (!t) return;
+            const u = prompt('URL'); if (!u) return;
+            currentActivityLinks.push({ id: 'lnk_' + Date.now(), title: t.trim(), url: u.trim() }); renderActivityLinksPreview();
         }
         function renderActivityLinksPreview() {
             const c = document.getElementById('activity-links-preview');
             c.innerHTML = currentActivityLinks.length ? currentActivityLinks.map((l, i) => `
                 <div class="flex items-center justify-between bg-white border border-zinc-200 rounded-xl px-3 py-2">
-                    <span class="text-sm truncate max-w-[80%]">${escapeHTML(l.title)}</span>
+                    <span class="text-sm font-medium truncate">${escapeHTML(l.title)}</span>
                     <button type="button" class="text-zinc-400 hover:text-red-500 px-2" onclick="currentActivityLinks.splice(${i},1); renderActivityLinksPreview();"><i class="fa-solid fa-times"></i></button>
-                </div>`).join('') : '<div class="text-xs text-zinc-400">リンクなし</div>';
+                </div>`).join('') : '<div class="text-xs font-bold text-zinc-400">リンクなし</div>';
         }
 
-        // ===== Logs List =====
-        function renderLogs(filteredActs = null) {
-            const c = document.getElementById('logs-list');
-            c.innerHTML = '';
-            const acts = filteredActs || data.activities.filter(a => a.oshiId === currentOshiId).sort((a, b) => new Date(b.date) - new Date(a.date));
+        function addActivity(e) {
+            e.preventDefault();
+            const date = document.getElementById('activity-date').value; const type = document.getElementById('activity-type').value; const title = document.getElementById('activity-title').value.trim();
+            if (!date || !type || !title) return;
+            const isPlanned = document.getElementById('activity-is-planned').checked;
+            const amounts = isPlanned ? { ticket:0, hotel:0, transport:0, other:0 } : {
+                ticket: parseInt(document.getElementById('act-amt-ticket').value)||0, hotel: parseInt(document.getElementById('act-amt-hotel').value)||0,
+                transport: parseInt(document.getElementById('act-amt-transport').value)||0, other: parseInt(document.getElementById('act-amt-other').value)||0
+            };
             
-            if (!acts.length) {
-                c.innerHTML = `<div class="p-12 text-center text-zinc-500">まだ活動記録がありません</div>`;
-                return;
+            data.activities.push({
+                id: 'act_' + Date.now(), oshiId: currentOshiId, date: date, type: type, title: title,
+                amounts: amounts, memo: document.getElementById('activity-memo').value.trim(), rating: isPlanned ? 5 : currentRating,
+                isPlanned: isPlanned, links: currentActivityLinks || []
+            });
+            
+            if (pendingLotteryIdForActivity) {
+                const l = data.lotteries.find(x => x.id === pendingLotteryIdForActivity);
+                if(l) l.isLinked = true;
+                pendingLotteryIdForActivity = null;
             }
             
+            saveData(); document.getElementById('add-activity-form').reset(); currentRating = 5; updateRatingStars(); currentActivityLinks = []; renderActivityLinksPreview(); togglePlannedMode(false, 'add');
+            showToast('活動を記録しました'); setTimeout(() => showSection('logs'), 300);
+        }
+
+        /* ===== LOGS ===== */
+        function renderLogs(filtered = null) {
+            const c = document.getElementById('logs-list'); c.innerHTML = '';
+            const acts = filtered || data.activities.filter(a => a.oshiId === currentOshiId).sort((a, b) => new Date(b.date) - new Date(a.date));
+            if (!acts.length) { c.innerHTML = `<div class="p-12 text-center text-zinc-400 font-bold text-sm">活動記録がありません</div>`; return; }
             acts.forEach(act => {
                 const row = document.createElement('div');
-                row.className = `log-row px-5 py-4 flex flex-col justify-center gap-y-2 cursor-pointer border-l-4 ${act.isPlanned ? 'border-l-zinc-300 opacity-80' : 'border-l-pink-400'}`;
+                row.className = `log-row px-5 py-4 flex flex-col justify-center gap-y-2 cursor-pointer border-l-[3px] ${act.isPlanned ? 'border-l-zinc-300 opacity-80' : 'border-l-pink-400'}`;
                 row.onclick = () => showActivityDetail(act.id);
-                
-                const d = new Date(act.date);
-                const dateFmt = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
-                const badge = act.isPlanned ? `<span class="text-[10px] bg-zinc-200 text-zinc-600 px-1.5 py-0.5 rounded ml-2">予定</span>` : '';
-                
-                // 一覧へのハイパーリンク追加
-                const linksHtml = (act.links && act.links.length > 0) ? `<div class="mt-1 flex flex-wrap gap-2">` + act.links.map(l => 
-                    `<a href="${escapeHTML(l.url)}" target="_blank" onclick="event.stopImmediatePropagation()" class="text-[10px] px-2 py-1 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100 transition flex items-center gap-x-1 border border-pink-100"><i class="fa-solid fa-external-link-alt"></i> ${escapeHTML(l.title)}</a>`
-                ).join('') + `</div>` : '';
-
+                const d = new Date(act.date); const dFmt = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+                const b = act.isPlanned ? `<span class="text-[9px] bg-zinc-200 text-zinc-600 px-1.5 py-0.5 rounded ml-2 font-bold">予定</span>` : '';
+                const lH = (act.links && act.links.length) ? `<div class="mt-2 flex flex-wrap gap-2">` + act.links.map(l => `<a href="${escapeHTML(l.url)}" target="_blank" onclick="event.stopImmediatePropagation()" class="text-[10px] px-2 py-1 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 text-zinc-600 rounded-lg transition flex items-center gap-x-1 font-medium"><i class="fa-solid fa-external-link-alt"></i> ${escapeHTML(l.title)}</a>`).join('') + `</div>` : '';
                 row.innerHTML = `
                     <div class="flex items-start justify-between gap-x-4">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-x-2 text-xs text-zinc-400 mb-1 font-mono">${dateFmt} ${badge}</div>
-                            <div class="font-medium text-sm truncate">${escapeHTML(act.title)}</div>
-                            <div class="text-[10px] mt-1 text-zinc-500">${escapeHTML(act.type)}</div>
+                            <div class="flex items-center gap-x-2 text-[11px] text-zinc-400 mb-1 font-mono font-bold">${dFmt} ${b}</div>
+                            <div class="font-bold text-sm text-zinc-800 truncate">${escapeHTML(act.title)}</div>
+                            <div class="text-[10px] mt-1 text-zinc-500 font-medium">${escapeHTML(act.type)}</div>
                         </div>
-                        <div class="flex items-start gap-x-4 text-right flex-shrink-0">
-                            ${!act.isPlanned ? `<div class="font-mono text-sm font-medium mt-1">${act.amount.toLocaleString()}円</div>` : ''}
+                        <div class="flex items-start gap-x-3 text-right flex-shrink-0">
+                            ${!act.isPlanned ? `<div class="font-mono text-sm font-bold text-pink-700 mt-1">${getTotalAmount(act.amounts).toLocaleString()}円</div>` : ''}
                             <button class="text-zinc-300 hover:text-red-500 p-2 z-10 transition-colors" onclick="deleteActivity('${act.id}', event)"><i class="fa-solid fa-trash text-sm"></i></button>
                         </div>
-                    </div>
-                    ${linksHtml}
-                `;
-                c.appendChild(row);
+                    </div> ${lH}
+                `; c.appendChild(row);
             });
         }
         function filterLogs() {
-            const term = document.getElementById('log-search').value.toLowerCase();
-            const type = document.getElementById('log-filter-type').value;
+            const term = document.getElementById('log-search').value.toLowerCase(); const type = document.getElementById('log-filter-type').value;
             renderLogs(data.activities.filter(a => a.oshiId === currentOshiId && (!term || a.title.toLowerCase().includes(term)) && (!type || a.type === type)));
         }
-        function deleteActivity(id, event) {
-            event.stopImmediatePropagation();
-            if (!confirm('削除しますか？')) return;
-            data.activities = data.activities.filter(a => a.id !== id);
-            saveData(); refreshAll(); showToast('削除しました');
+        function deleteActivity(id, e) {
+            e.stopImmediatePropagation(); if (!confirm('削除しますか？')) return;
+            data.activities = data.activities.filter(a => a.id !== id); saveData(); refreshAll(); showToast('削除しました');
         }
 
-        // ===== Activity Detail =====
-        function showActivityDetail(id) {
-            editingActivityId = id; renderActivityDetailReadOnly();
-            const m = document.getElementById('activity-detail-modal');
-            m.classList.remove('hidden'); m.classList.add('flex');
-        }
-        function hideActivityDetailModal() {
-            document.getElementById('activity-detail-modal').classList.remove('flex');
-            document.getElementById('activity-detail-modal').classList.add('hidden');
-            editingActivityId = null;
-        }
+        /* ===== ACTIVITY DETAIL ===== */
+        function showActivityDetail(id) { editingActivityId = id; renderActivityDetailReadOnly(); document.getElementById('activity-detail-modal').classList.remove('hidden'); document.getElementById('activity-detail-modal').classList.add('flex'); }
+        function hideActivityDetailModal() { document.getElementById('activity-detail-modal').classList.remove('flex'); document.getElementById('activity-detail-modal').classList.add('hidden'); editingActivityId = null; }
 
         function renderActivityDetailReadOnly() {
-            const act = data.activities.find(a => a.id === editingActivityId);
-            if (!act) return;
-            
-            let stars = '';
-            if (!act.isPlanned) { for(let i=1; i<=5; i++) stars += `<i class="fa-solid fa-star ${i<=act.rating?'text-yellow-400':'text-zinc-200'}"></i>`; }
-            
-            const linksHtml = (act.links||[]).map(l => `<a href="${escapeHTML(l.url)}" target="_blank" class="flex items-center gap-x-2 text-pink-600 hover:text-pink-700 hover:underline bg-pink-50 hover:bg-pink-100 px-3 py-2 rounded-xl transition mb-2 w-fit"><i class="fa-solid fa-external-link-alt text-xs"></i><span class="text-sm font-medium">${escapeHTML(l.title)}</span></a>`).join('');
+            const act = data.activities.find(a => a.id === editingActivityId); if (!act) return;
+            let stars = ''; if (!act.isPlanned) { for(let i=1; i<=5; i++) stars += `<i class="fa-solid fa-star ${i<=act.rating?'text-yellow-400':'text-zinc-200'}"></i>`; }
+            const lH = (act.links||[]).map(l => `<a href="${escapeHTML(l.url)}" target="_blank" class="flex items-center gap-x-2 text-zinc-600 hover:text-pink-600 bg-zinc-50 hover:bg-pink-50 border border-zinc-200 hover:border-pink-200 px-3 py-2.5 rounded-xl transition mb-2 w-fit"><i class="fa-solid fa-external-link-alt text-xs"></i><span class="text-sm font-bold">${escapeHTML(l.title)}</span></a>`).join('');
 
             document.getElementById('activity-detail-content').innerHTML = `
                 <div class="mb-4 pt-2">
-                    <span class="text-xs font-mono text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-lg">${escapeHTML(act.date)}</span>
-                    ${act.isPlanned ? `<span class="text-xs bg-zinc-200 text-zinc-600 px-2.5 py-1 rounded-lg ml-2 font-medium">予定</span>` : ''}
+                    <span class="text-xs font-mono font-bold text-zinc-500 bg-zinc-100 px-2.5 py-1.5 rounded-lg">${escapeHTML(act.date)}</span>
+                    ${act.isPlanned ? `<span class="text-xs bg-zinc-200 text-zinc-600 px-2.5 py-1.5 rounded-lg ml-2 font-bold">予定</span>` : ''}
                 </div>
-                <h3 class="text-xl font-bold mb-2">${escapeHTML(act.title)}</h3>
-                <div class="text-xs text-zinc-500 mb-6 flex items-center gap-x-2"><i class="fa-solid fa-tag"></i> ${escapeHTML(act.type)}</div>
+                <h3 class="text-xl font-bold mb-2 text-zinc-800">${escapeHTML(act.title)}</h3>
+                <div class="text-xs font-bold text-zinc-400 mb-6 flex items-center gap-x-2"><i class="fa-solid fa-tag"></i> ${escapeHTML(act.type)}</div>
                 
                 ${!act.isPlanned ? `
-                <div class="flex bg-pink-50/50 rounded-2xl p-4 mb-6 border border-pink-50">
-                    <div class="flex-1 border-r border-pink-100">
-                        <div class="text-[10px] text-zinc-500 mb-1">支出</div>
-                        <div class="text-lg font-mono font-semibold text-pink-700">${act.amount.toLocaleString()}<span class="text-xs ml-1 text-zinc-500 font-sans">円</span></div>
+                <div class="bg-pink-50/50 rounded-2xl p-4 mb-6 border border-pink-100">
+                    <div class="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-wider border-b border-pink-100 pb-2">支出の内訳</div>
+                    <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-3">
+                        <div><div class="text-[10px] text-zinc-500">チケット代等</div><div class="font-mono font-bold">¥${(act.amounts?.ticket||0).toLocaleString()}</div></div>
+                        <div><div class="text-[10px] text-zinc-500">ホテル代</div><div class="font-mono font-bold">¥${(act.amounts?.hotel||0).toLocaleString()}</div></div>
+                        <div><div class="text-[10px] text-zinc-500">交通費</div><div class="font-mono font-bold">¥${(act.amounts?.transport||0).toLocaleString()}</div></div>
+                        <div><div class="text-[10px] text-zinc-500">その他</div><div class="font-mono font-bold">¥${(act.amounts?.other||0).toLocaleString()}</div></div>
                     </div>
-                    <div class="flex-1 pl-4">
-                        <div class="text-[10px] text-zinc-500 mb-1">満足度</div>
-                        <div class="text-sm mt-1.5">${stars}</div>
+                    <div class="flex items-end justify-between pt-3 border-t border-pink-100">
+                        <div class="text-[10px] font-bold text-zinc-500">合計</div>
+                        <div class="text-2xl font-black text-pink-600 font-mono">¥${getTotalAmount(act.amounts).toLocaleString()}</div>
                     </div>
-                </div>` : ''}
+                </div>
+                <div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">満足度</div><div class="text-sm">${stars}</div></div>` : ''}
+                
+                ${act.memo ? `<div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">メモ</div><div class="bg-zinc-50 p-4 rounded-2xl text-zinc-700 whitespace-pre-wrap leading-relaxed text-sm font-medium border border-zinc-100">${escapeHTML(act.memo)}</div></div>` : ''}
+                ${lH ? `<div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">リンク</div>${lH}</div>` : ''}
 
-                ${act.memo ? `
-                <div class="mb-6">
-                    <div class="text-xs font-semibold text-zinc-400 mb-2">メモ</div>
-                    <div class="bg-zinc-50 p-4 rounded-2xl text-zinc-700 whitespace-pre-wrap leading-relaxed text-sm border border-zinc-100">${escapeHTML(act.memo)}</div>
-                </div>` : ''}
-
-                ${linksHtml ? `<div class="mb-6"><div class="text-xs font-semibold text-zinc-400 mb-2">リンク</div>${linksHtml}</div>` : ''}
-
-                <div class="pt-4 border-t border-zinc-100 text-center">
-                    <button onclick="renderActivityDetailEditMode()" class="w-full py-3.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-2xl font-semibold transition flex items-center justify-center gap-x-2">
-                        <i class="fa-solid fa-edit"></i> 編集する
-                    </button>
-                    ${act.isPlanned ? `
-                    <button onclick="markActivityAsDone()" class="w-full py-3.5 mt-3 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold transition flex items-center justify-center gap-x-2 shadow-sm shadow-pink-200">
-                        <i class="fa-solid fa-check"></i> 実績として確定する
-                    </button>` : ''}
+                <div class="pt-6 text-center">
+                    <button onclick="renderActivityDetailEditMode()" class="w-full py-3.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-2xl font-bold transition flex items-center justify-center gap-x-2"><i class="fa-solid fa-edit"></i> 編集する</button>
+                    ${act.isPlanned ? `<button onclick="markActivityAsDone()" class="w-full py-3.5 mt-3 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-bold transition flex items-center justify-center gap-x-2 shadow-sm shadow-pink-200"><i class="fa-solid fa-check"></i> 実績として確定する</button>` : ''}
                 </div>
             `;
         }
-
         function markActivityAsDone() {
             const act = data.activities.find(a => a.id === editingActivityId);
-            if(act) {
-                act.isPlanned = false; saveData(); renderActivityDetailEditMode();
-                showToast('実績として確定しました。金額と満足度を入力してください');
-            }
+            if(act) { act.isPlanned = false; saveData(); renderActivityDetailEditMode(); showToast('実績として確定しました。金額等を入力してください'); }
         }
-
         function renderActivityDetailEditMode() {
-            const act = data.activities.find(a => a.id === editingActivityId);
-            if (!act) return;
-
-            // 一時データにリンクをコピー
+            const act = data.activities.find(a => a.id === editingActivityId); if (!act) return;
             editingActivityLinksTemp = JSON.parse(JSON.stringify(act.links || []));
-
-            let stars = '';
-            for(let i=1; i<=5; i++) stars += `<i class="fa-solid fa-star cursor-pointer text-xl edit-star ${i<=act.rating?'text-yellow-400':'text-zinc-200'}" data-val="${i}"></i>`;
-
-            const types = ['イベント参加','グッズ購入','配信視聴','写真撮影','ファンアート','その他'];
-            const typeOpts = types.map(t => `<option value="${t}" ${act.type===t?'selected':''}>${t}</option>`).join('');
+            let stars = ''; for(let i=1; i<=5; i++) stars += `<i class="fa-solid fa-star cursor-pointer text-2xl edit-star ${i<=act.rating?'text-yellow-400':'text-zinc-200'}" data-val="${i}"></i>`;
+            const typeOpts = ACTIVITY_TYPES.map(t => `<option value="${t}" ${act.type===t?'selected':''}>${t}</option>`).join('');
 
             document.getElementById('activity-detail-content').innerHTML = `
-                <div class="font-bold text-lg mb-4 text-pink-600 pt-1">記録を編集</div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-xs text-zinc-500 block mb-1">日付</label>
-                        <input type="date" id="edit-act-date" value="${escapeHTML(act.date)}" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm font-mono">
-                    </div>
-                    <div>
-                        <label class="text-xs text-zinc-500 block mb-1">種類</label>
-                        <select id="edit-act-type" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm">${typeOpts}</select>
-                    </div>
-                    <div>
-                        <label class="text-xs text-zinc-500 block mb-1">タイトル</label>
-                        <input type="text" id="edit-act-title" value="${escapeHTML(act.title)}" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm">
-                    </div>
+                <div class="font-black text-xl mb-6 text-zinc-800 pt-1">記録の編集</div>
+                <div class="space-y-5">
+                    <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">日付</label><input type="date" id="edit-act-date" value="${escapeHTML(act.date)}" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                    <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">種類</label><select id="edit-act-type" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-pink-200 outline-none">${typeOpts}</select></div>
+                    <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">タイトル</label><input type="text" id="edit-act-title" value="${escapeHTML(act.title)}" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-200 outline-none"></div>
                     
-                    <div class="flex items-center gap-x-2 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                        <input type="checkbox" id="edit-act-planned" ${act.isPlanned?'checked':''} onchange="togglePlannedMode(this.checked, 'edit')" class="w-4 h-4 accent-pink-600">
-                        <label for="edit-act-planned" class="text-sm font-medium">これは予定です</label>
+                    <div class="flex items-center gap-x-2 bg-pink-50/50 p-3.5 rounded-xl border border-pink-100">
+                        <input type="checkbox" id="edit-act-planned" ${act.isPlanned?'checked':''} onchange="togglePlannedMode(this.checked, 'edit')" class="w-4 h-4 accent-pink-600 rounded">
+                        <label for="edit-act-planned" class="text-sm font-bold text-pink-800">これは予定です</label>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-4 transition-opacity duration-200" id="edit-details-container" style="${act.isPlanned?'opacity:0.3; pointer-events:none;':''}">
-                        <div class="flex-1">
-                            <label class="text-xs text-zinc-500 block mb-1">金額（円）</label>
-                            <input type="number" id="edit-act-amount" value="${act.amount}" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm font-mono">
+                    <div class="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 space-y-4 transition-opacity duration-200" id="edit-details-container" style="${act.isPlanned?'opacity:0.3; pointer-events:none;':''}">
+                        <div class="text-xs font-bold text-zinc-500 uppercase tracking-wider border-b border-zinc-200 pb-2">支出の内訳</div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">チケット代等</label><input type="number" id="edit-act-ticket" value="${act.amounts?.ticket||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                            <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">ホテル代</label><input type="number" id="edit-act-hotel" value="${act.amounts?.hotel||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                            <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">交通費</label><input type="number" id="edit-act-transport" value="${act.amounts?.transport||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
+                            <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">その他</label><input type="number" id="edit-act-other" value="${act.amounts?.other||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
                         </div>
-                        <div class="flex-1">
-                            <label class="text-xs text-zinc-500 block mb-1">満足度</label>
-                            <div class="flex items-center gap-x-1 mt-1.5" id="edit-act-stars">${stars}</div>
-                            <input type="hidden" id="edit-act-rating" value="${act.rating}">
-                        </div>
+                        <div class="pt-2"><label class="text-xs font-bold text-zinc-500 mb-2 block">満足度</label><div class="flex items-center gap-x-1" id="edit-act-stars">${stars}</div><input type="hidden" id="edit-act-rating" value="${act.rating}"></div>
                     </div>
                     
-                    <div>
-                        <label class="text-xs text-zinc-500 block mb-1">メモ</label>
-                        <textarea id="edit-act-memo" rows="3" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm resize-y">${escapeHTML(act.memo||'')}</textarea>
-                    </div>
+                    <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">メモ</label><textarea id="edit-act-memo" rows="3" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm resize-y focus:ring-2 focus:ring-pink-200 outline-none">${escapeHTML(act.memo||'')}</textarea></div>
                     
                     <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
                         <div class="flex items-center justify-between mb-3">
-                            <label class="block text-sm font-medium text-zinc-700">関連リンク</label>
-                            <button type="button" onclick="addLinkToEditingActivity()" class="text-xs px-3 py-1.5 bg-white border border-zinc-200 shadow-sm text-zinc-600 hover:text-pink-600 hover:border-pink-200 rounded-lg font-medium transition-colors">
-                                <i class="fa-solid fa-plus mr-1"></i>リンク追加
-                            </button>
+                            <label class="block text-sm font-bold text-zinc-700">関連リンク</label>
+                            <button type="button" onclick="addLinkToEditingActivity()" class="text-xs px-3 py-1.5 bg-white border border-zinc-200 shadow-sm text-zinc-600 hover:text-pink-600 hover:border-pink-200 rounded-lg font-bold transition-colors"><i class="fa-solid fa-plus mr-1"></i>追加</button>
                         </div>
                         <div id="edit-act-links-container" class="space-y-2"></div>
                     </div>
 
-                    <div class="flex gap-x-3 pt-4 border-t border-zinc-100">
-                        <button onclick="renderActivityDetailReadOnly()" class="flex-1 py-3.5 border rounded-2xl text-sm font-medium hover:bg-zinc-50 transition">キャンセル</button>
-                        <button onclick="saveActivityEdit()" class="flex-1 py-3.5 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl text-sm font-semibold transition shadow-sm shadow-pink-200">保存する</button>
+                    <div class="flex gap-x-3 pt-6 border-t border-zinc-100">
+                        <button onclick="renderActivityDetailReadOnly()" class="flex-1 py-3.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-2xl text-sm font-bold transition">キャンセル</button>
+                        <button onclick="saveActivityEdit()" class="flex-[2] py-3.5 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl text-sm font-bold transition shadow-sm shadow-pink-200">保存する</button>
                     </div>
                 </div>
             `;
-
-            renderEditActivityLinks(); // リンク表示の初期化
-
-            document.querySelectorAll('.edit-star').forEach(s => {
-                s.onclick = (e) => {
-                    const val = parseInt(e.target.dataset.val);
-                    document.getElementById('edit-act-rating').value = val;
-                    document.querySelectorAll('.edit-star').forEach((st, i) => {
-                        st.className = `fa-solid fa-star cursor-pointer text-xl edit-star ${i<val?'text-yellow-400':'text-zinc-200'}`;
-                    });
-                };
-            });
-        }
-
-        // 編集画面内リンク管理
-        function renderEditActivityLinks() {
-            const container = document.getElementById('edit-act-links-container');
-            if (!container) return;
-            container.innerHTML = editingActivityLinksTemp.length ? editingActivityLinksTemp.map((l, i) => `
-                <div class="flex items-center justify-between bg-white border border-zinc-200 rounded-xl px-3 py-2">
-                    <span class="text-sm truncate max-w-[80%]">${escapeHTML(l.title)}</span>
-                    <button type="button" class="text-zinc-400 hover:text-red-500 px-2" onclick="editingActivityLinksTemp.splice(${i},1); renderEditActivityLinks();"><i class="fa-solid fa-times"></i></button>
-                </div>`).join('') : '<div class="text-xs text-zinc-400">リンクなし</div>';
-        }
-        function addLinkToEditingActivity() {
-            const title = prompt('リンクのタイトル'); if (!title) return;
-            const url = prompt('URL'); if (!url) return;
-            editingActivityLinksTemp.push({ id: 'lnk_' + Date.now(), title: title.trim(), url: url.trim() });
             renderEditActivityLinks();
+            document.querySelectorAll('.edit-star').forEach(s => { s.onclick = (e) => { const v = parseInt(e.target.dataset.val); document.getElementById('edit-act-rating').value = v; document.querySelectorAll('.edit-star').forEach((st, i) => { st.className = `fa-solid fa-star cursor-pointer text-2xl edit-star ${i<v?'text-yellow-400':'text-zinc-200'}`; }); }; });
         }
-
+        function renderEditActivityLinks() {
+            const c = document.getElementById('edit-act-links-container'); if (!c) return;
+            c.innerHTML = editingActivityLinksTemp.length ? editingActivityLinksTemp.map((l, i) => `<div class="flex items-center justify-between bg-white border border-zinc-200 rounded-xl px-3 py-2"><span class="text-sm font-medium truncate max-w-[80%]">${escapeHTML(l.title)}</span><button type="button" class="text-zinc-400 hover:text-red-500 px-2" onclick="editingActivityLinksTemp.splice(${i},1); renderEditActivityLinks();"><i class="fa-solid fa-times"></i></button></div>`).join('') : '<div class="text-xs font-bold text-zinc-400">リンクなし</div>';
+        }
+        function addLinkToEditingActivity() { const t = prompt('タイトル'); if (!t) return; const u = prompt('URL'); if (!u) return; editingActivityLinksTemp.push({ id: 'lnk_' + Date.now(), title: t.trim(), url: u.trim() }); renderEditActivityLinks(); }
         function saveActivityEdit() {
-            const act = data.activities.find(a => a.id === editingActivityId);
-            if(!act) return;
-            
-            act.date = document.getElementById('edit-act-date').value;
-            act.type = document.getElementById('edit-act-type').value;
-            act.title = document.getElementById('edit-act-title').value.trim();
+            const act = data.activities.find(a => a.id === editingActivityId); if(!act) return;
+            act.date = document.getElementById('edit-act-date').value; act.type = document.getElementById('edit-act-type').value; act.title = document.getElementById('edit-act-title').value.trim();
             act.isPlanned = document.getElementById('edit-act-planned').checked;
-            act.amount = act.isPlanned ? 0 : (parseInt(document.getElementById('edit-act-amount').value)||0);
+            act.amounts = act.isPlanned ? {ticket:0,hotel:0,transport:0,other:0} : { ticket:parseInt(document.getElementById('edit-act-ticket').value)||0, hotel:parseInt(document.getElementById('edit-act-hotel').value)||0, transport:parseInt(document.getElementById('edit-act-transport').value)||0, other:parseInt(document.getElementById('edit-act-other').value)||0 };
             act.rating = act.isPlanned ? 5 : parseInt(document.getElementById('edit-act-rating').value);
-            act.memo = document.getElementById('edit-act-memo').value.trim();
-            act.links = JSON.parse(JSON.stringify(editingActivityLinksTemp)); // リンクの保存
-            
+            act.memo = document.getElementById('edit-act-memo').value.trim(); act.links = JSON.parse(JSON.stringify(editingActivityLinksTemp));
             saveData(); refreshAll(); renderActivityDetailReadOnly(); showToast('更新しました');
         }
 
-        // ===== Wishlist =====
-        function renderWishlist() {
-            const c = document.getElementById('wishlist-list');
-            c.innerHTML = '';
-            const items = data.wishlist.filter(w => w.oshiId === currentOshiId);
+        /* ===== LOTTERIES (当落管理) ===== */
+        function getLotteryPlaces() { const p = new Set(); data.lotteries.filter(l => l.oshiId === currentOshiId).forEach(l => { if(l.place) p.add(l.place); }); return Array.from(p).sort(); }
+        function getLotteryYears() { const y = new Set(); data.lotteries.filter(l => l.oshiId === currentOshiId).forEach(l => { if(l.date) y.add(l.date.substring(0,4)); }); return Array.from(y).sort().reverse(); }
+        
+        function renderLotteries() {
+            // Update Filters Options dynamically based on data
+            const ySel = document.getElementById('lottery-filter-year'); const curY = ySel.value;
+            ySel.innerHTML = '<option value="">全期間</option>' + getLotteryYears().map(y => `<option value="${y}">${y}年</option>`).join('');
+            if(curY && getLotteryYears().includes(curY)) ySel.value = curY;
             
-            if (!items.length) {
-                c.innerHTML = `<div class="col-span-full empty-state border border-dashed border-pink-200 rounded-3xl p-8 text-center text-pink-600 font-medium">欲しいものがまだありません</div>`;
-                return;
+            const pSel = document.getElementById('lottery-filter-place'); const curP = pSel.value;
+            pSel.innerHTML = '<option value="">すべての場所</option>' + getLotteryPlaces().map(p => `<option value="${escapeHTML(p)}">${escapeHTML(p)}</option>`).join('');
+            if(curP && getLotteryPlaces().includes(curP)) pSel.value = curP;
+
+            const tSel = document.getElementById('lottery-filter-type'); if(tSel.options.length<=1) { tSel.innerHTML = '<option value="">すべての種類</option>' + ACTIVITY_TYPES.map(t => `<option value="${t}">${t}</option>`).join(''); }
+
+            // Filter logic
+            const yFil = ySel.value; const tFil = tSel.value; const pFil = pSel.value;
+            const myLots = data.lotteries.filter(l => l.oshiId === currentOshiId);
+            const filtered = myLots.filter(l => (!yFil || l.date.startsWith(yFil)) && (!tFil || l.type === tFil) && (!pFil || l.place === pFil)).sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            // Stats
+            const determined = filtered.filter(l => l.status !== 'waiting');
+            const won = determined.filter(l => l.status === 'won').length;
+            const rate = determined.length ? Math.round((won / determined.length) * 100) : 0;
+            document.getElementById('lottery-stats-text').innerHTML = `${determined.length}<span class="text-sm font-bold text-zinc-400 mx-1">戦</span>${won}<span class="text-sm font-bold text-zinc-400 mx-1">勝</span><span class="text-3xl font-black ml-2 text-pink-600">${rate}%</span>`;
+
+            const c = document.getElementById('lotteries-list'); c.innerHTML = '';
+            if(!filtered.length) { c.innerHTML = `<div class="p-8 text-center text-zinc-400 font-bold text-sm bg-white rounded-3xl border border-zinc-100">データがありません</div>`; return; }
+
+            filtered.forEach(l => {
+                const row = document.createElement('div');
+                row.className = `bg-white border border-zinc-100 rounded-2xl p-4 shadow-sm transition-all hover:shadow-md cursor-pointer ${l.status==='won'?'border-l-4 border-l-pink-400 bg-pink-50/20':l.status==='lost'?'opacity-70':''}`;
+                row.onclick = () => showLotteryModal(l.id);
+
+                const badgeMap = { waiting: '<span class="bg-amber-100 text-amber-700 px-2 py-1 rounded-lg text-[10px] font-black tracking-wide">結果待ち</span>', won: '<span class="bg-pink-100 text-pink-700 px-2 py-1 rounded-lg text-[10px] font-black tracking-wide">当選 🎉</span>', lost: '<span class="bg-zinc-200 text-zinc-600 px-2 py-1 rounded-lg text-[10px] font-black tracking-wide">落選</span>' };
+                
+                const linkBtn = (l.status === 'won' && !l.isLinked) ? `<button class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-900 text-white rounded-xl text-[10px] font-bold shadow-sm transition-colors flex items-center gap-x-1 z-10 relative" onclick="linkToActivity('${l.id}', event)"><i class="fa-solid fa-arrow-right-to-bracket"></i> 活動へ</button>` : (l.status === 'won' && l.isLinked) ? `<span class="px-2 py-1 text-emerald-600 bg-emerald-50 rounded-lg text-[10px] font-bold border border-emerald-100 flex items-center gap-x-1"><i class="fa-solid fa-check"></i> 連携済</span>` : '';
+
+                row.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex items-center gap-x-2">
+                            ${badgeMap[l.status]}
+                            <span class="text-[11px] font-mono font-bold text-zinc-400">${l.date}</span>
+                        </div>
+                        <div class="flex items-center gap-x-2">
+                            ${linkBtn}
+                            <button class="text-zinc-400 hover:text-pink-600 p-1.5 rounded-lg hover:bg-pink-50 transition-colors z-10 relative" title="コピーして追加" onclick="copyLottery('${l.id}', event)"><i class="fa-regular fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="font-bold text-base text-zinc-800 mb-1">${escapeHTML(l.eventName)}</div>
+                    <div class="flex gap-x-2 text-[10px] font-bold text-zinc-500">
+                        <span class="bg-zinc-100 px-2 py-0.5 rounded">${escapeHTML(l.type)}</span>
+                        <span class="bg-zinc-100 px-2 py-0.5 rounded"><i class="fa-solid fa-location-dot mr-1"></i>${escapeHTML(l.place||'未設定')}</span>
+                    </div>
+                `;
+                c.appendChild(row);
+            });
+        }
+
+        function showLotteryModal(id = null) {
+            const isCopy = id && id.startsWith('copy_');
+            editingLotteryId = isCopy ? null : id; // copyの場合は新規保存させる
+            
+            const pSel = document.getElementById('lottery-place-select');
+            const places = getLotteryPlaces();
+            pSel.innerHTML = '<option value="">選択してください</option>' + places.map(p => `<option value="${escapeHTML(p)}">${escapeHTML(p)}</option>`).join('') + '<option value="--add-new--" class="font-bold text-pink-600">＋ 新しい場所を追加</option>';
+
+            const titleEl = document.getElementById('lottery-modal-title');
+            
+            if (id) {
+                titleEl.textContent = isCopy ? '当落の登録 (コピー)' : '当落の編集';
+                const sourceId = isCopy ? id.replace('copy_', '') : id;
+                const l = data.lotteries.find(x => x.id === sourceId);
+                if (l) {
+                    document.getElementById('lottery-event').value = l.eventName;
+                    document.getElementById('lottery-date').value = l.date;
+                    document.getElementById('lottery-type').value = l.type;
+                    document.getElementById('lottery-status').value = isCopy ? 'waiting' : l.status; // copy時はリセット
+                    if (places.includes(l.place)) { pSel.value = l.place; } 
+                    else if (l.place) { pSel.innerHTML = `<option value="${escapeHTML(l.place)}">${escapeHTML(l.place)}</option>` + pSel.innerHTML; pSel.value = l.place; }
+                }
+            } else {
+                titleEl.textContent = '当落の登録';
+                document.getElementById('lottery-event').value = ''; document.getElementById('lottery-date').value = ''; document.getElementById('lottery-type').value = '';
+                document.getElementById('lottery-status').value = 'waiting'; pSel.value = '';
             }
-            
+            document.getElementById('lottery-modal').classList.remove('hidden'); document.getElementById('lottery-modal').classList.add('flex');
+        }
+
+        function hideLotteryModal() { document.getElementById('lottery-modal').classList.add('hidden'); document.getElementById('lottery-modal').classList.remove('flex'); }
+
+        function handlePlaceSelect(sel) {
+            if (sel.value === '--add-new--') {
+                const nv = prompt('新しい場所を入力してください (例: 東京, 大阪, オンライン)');
+                if (nv && nv.trim() !== '') {
+                    const opt = document.createElement('option'); opt.value = nv.trim(); opt.textContent = nv.trim();
+                    sel.insertBefore(opt, sel.lastElementChild); sel.value = nv.trim();
+                } else { sel.value = ''; }
+            }
+        }
+
+        function copyLottery(id, event) { event.stopImmediatePropagation(); showLotteryModal('copy_' + id); }
+
+        function saveLottery() {
+            const ev = document.getElementById('lottery-event').value.trim(); const dt = document.getElementById('lottery-date').value;
+            const ty = document.getElementById('lottery-type').value; const st = document.getElementById('lottery-status').value;
+            const pl = document.getElementById('lottery-place-select').value;
+
+            if(!ev || !dt || !ty) return alert('イベント名、公演日、種類は必須です');
+
+            if (editingLotteryId) {
+                const l = data.lotteries.find(x => x.id === editingLotteryId);
+                if (l) {
+                    if (l.status === 'won' && st !== 'won') l.isLinked = false; // 当選以外に戻したら連携リセット
+                    l.eventName = ev; l.date = dt; l.type = ty; l.status = st; l.place = pl;
+                    showToast('更新しました');
+                }
+            } else {
+                data.lotteries.push({ id: 'lot_' + Date.now(), oshiId: currentOshiId, eventName: ev, date: dt, type: ty, place: pl, status: st, isLinked: false });
+                showToast('登録しました');
+            }
+            saveData(); hideLotteryModal(); renderLotteries();
+        }
+
+        function linkToActivity(id, event) {
+            event.stopImmediatePropagation();
+            const l = data.lotteries.find(x => x.id === id); if(!l) return;
+            pendingLotteryIdForActivity = id;
+            showSection('add');
+            document.getElementById('activity-date').value = l.date; document.getElementById('activity-type').value = l.type; document.getElementById('activity-title').value = l.eventName;
+            document.getElementById('activity-is-planned').checked = true; togglePlannedMode(true, 'add');
+            showToast('当落情報をセットしました。保存すると活動予定になります');
+        }
+
+        /* ===== WISHLIST ===== */
+        function renderWishlist() {
+            const c = document.getElementById('wishlist-list'); c.innerHTML = '';
+            const items = data.wishlist.filter(w => w.oshiId === currentOshiId);
+            if (!items.length) { c.innerHTML = `<div class="col-span-full border border-dashed border-pink-200 rounded-3xl p-8 text-center text-pink-600 font-bold text-sm">欲しいものがまだありません</div>`; return; }
             items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = `bg-white border border-zinc-100 rounded-3xl p-5 flex flex-col cursor-pointer hover:shadow-md transition ${item.completed ? 'opacity-60 bg-zinc-50' : ''}`;
                 card.onclick = () => showWishlistDetailReadOnly(item.id);
-                
-                const priL = item.priority === 3 ? '高' : item.priority === 2 ? '中' : '低';
-                const priC = item.priority === 3 ? 'text-red-500 bg-red-50' : item.priority === 2 ? 'text-amber-500 bg-amber-50' : 'text-zinc-500 bg-zinc-100';
-                
-                // ウィッシュリスト一覧のハイパーリンク
-                const linkBtn = item.url ? `<a href="${escapeHTML(item.url)}" target="_blank" onclick="event.stopImmediatePropagation()" class="mt-2 text-xs text-pink-600 bg-pink-50 hover:bg-pink-100 px-3 py-1.5 rounded-xl transition flex items-center gap-x-1.5 w-fit font-medium border border-pink-100"><i class="fa-solid fa-external-link-alt text-[10px]"></i> リンクを開く</a>` : '';
-
+                const priL = item.priority === 3 ? '高' : item.priority === 2 ? '中' : '低'; const priC = item.priority === 3 ? 'text-red-500 bg-red-50' : item.priority === 2 ? 'text-amber-500 bg-amber-50' : 'text-zinc-500 bg-zinc-100';
+                const linkBtn = item.url ? `<a href="${escapeHTML(item.url)}" target="_blank" onclick="event.stopImmediatePropagation()" class="mt-2 text-[10px] text-pink-600 bg-pink-50 hover:bg-pink-100 px-3 py-1.5 rounded-lg transition flex items-center gap-x-1.5 w-fit font-bold border border-pink-100"><i class="fa-solid fa-external-link-alt"></i> リンクを開く</a>` : '';
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <div class="font-semibold pr-2">${escapeHTML(item.item)}</div>
-                        <div class="text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${priC}">${priL}</div>
-                    </div>
-                    ${linkBtn}
+                        <div class="font-bold text-zinc-800 pr-2">${escapeHTML(item.item)}</div>
+                        <div class="text-[10px] px-2 py-0.5 rounded flex-shrink-0 font-bold ${priC}">${priL}</div>
+                    </div> ${linkBtn}
                     <div class="mt-auto pt-4 flex items-end justify-between">
-                        <div>
-                            <div class="text-[10px] text-zinc-500">予想価格</div>
-                            <div class="font-mono text-base font-semibold">¥${item.expectedPrice.toLocaleString()}</div>
-                        </div>
-                        ${item.completed ? `<span class="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded font-medium"><i class="fa-solid fa-check"></i> 購入済</span>` : ''}
-                    </div>
-                `;
-                c.appendChild(card);
+                        <div><div class="text-[10px] text-zinc-400 font-bold uppercase">予想価格</div><div class="font-mono text-base font-black text-zinc-700">¥${item.expectedPrice.toLocaleString()}</div></div>
+                        ${item.completed ? `<span class="text-[10px] px-2 py-1 bg-emerald-100 text-emerald-700 rounded font-bold"><i class="fa-solid fa-check"></i> 購入済</span>` : ''}
+                    </div>`; c.appendChild(card);
             });
         }
-
         function showWishlistEditModal(id = null) {
-            editingWishlistId = id;
-            document.getElementById('wishlist-modal-title').textContent = id ? '欲しいものを編集' : '欲しいものを追加';
-            
+            editingWishlistId = id; document.getElementById('wishlist-modal-title').textContent = id ? '欲しいものを編集' : '欲しいものを追加';
             if (id) {
-                const item = data.wishlist.find(w => w.id === id);
-                document.getElementById('wishlist-item').value = item.item;
-                document.getElementById('wishlist-url').value = item.url || '';
-                document.getElementById('wishlist-price').value = item.expectedPrice;
-                document.getElementById('wishlist-priority').value = item.priority;
-                hideWishlistDetailModal();
-            } else {
-                document.getElementById('wishlist-item').value = '';
-                document.getElementById('wishlist-url').value = '';
-                document.getElementById('wishlist-price').value = 0;
-                document.getElementById('wishlist-priority').value = 2;
-            }
-            
+                const item = data.wishlist.find(w => w.id === id); document.getElementById('wishlist-item').value = item.item; document.getElementById('wishlist-url').value = item.url || '';
+                document.getElementById('wishlist-price').value = item.expectedPrice; document.getElementById('wishlist-priority').value = item.priority; hideWishlistDetailModal();
+            } else { document.getElementById('wishlist-item').value = ''; document.getElementById('wishlist-url').value = ''; document.getElementById('wishlist-price').value = 0; document.getElementById('wishlist-priority').value = 2; }
             document.getElementById('wishlist-modal').classList.remove('hidden'); document.getElementById('wishlist-modal').classList.add('flex');
         }
-
-        function hideWishlistModal() {
-            document.getElementById('wishlist-modal').classList.remove('flex');
-            document.getElementById('wishlist-modal').classList.add('hidden');
-            editingWishlistId = null;
-        }
-
+        function hideWishlistModal() { document.getElementById('wishlist-modal').classList.remove('flex'); document.getElementById('wishlist-modal').classList.add('hidden'); editingWishlistId = null; }
         function saveWishlist() {
-            const name = document.getElementById('wishlist-item').value.trim();
-            if (!name) return;
-            
+            const name = document.getElementById('wishlist-item').value.trim(); if (!name) return;
             if (editingWishlistId) {
-                const item = data.wishlist.find(w => w.id === editingWishlistId);
-                item.item = name; item.url = document.getElementById('wishlist-url').value.trim();
-                item.expectedPrice = parseInt(document.getElementById('wishlist-price').value) || 0;
-                item.priority = parseInt(document.getElementById('wishlist-priority').value);
-                showToast('更新しました');
+                const item = data.wishlist.find(w => w.id === editingWishlistId); item.item = name; item.url = document.getElementById('wishlist-url').value.trim();
+                item.expectedPrice = parseInt(document.getElementById('wishlist-price').value) || 0; item.priority = parseInt(document.getElementById('wishlist-priority').value); showToast('更新しました');
             } else {
-                data.wishlist.push({
-                    id: 'w_' + Date.now(), oshiId: currentOshiId, item: name,
-                    url: document.getElementById('wishlist-url').value.trim(),
-                    expectedPrice: parseInt(document.getElementById('wishlist-price').value)||0,
-                    priority: parseInt(document.getElementById('wishlist-priority').value), completed: false
-                });
-                showToast('追加しました');
+                data.wishlist.push({ id: 'w_' + Date.now(), oshiId: currentOshiId, item: name, url: document.getElementById('wishlist-url').value.trim(), expectedPrice: parseInt(document.getElementById('wishlist-price').value)||0, priority: parseInt(document.getElementById('wishlist-priority').value), completed: false }); showToast('追加しました');
             }
             saveData(); hideWishlistModal(); renderWishlist();
         }
-
         function showWishlistDetailReadOnly(id) {
-            const item = data.wishlist.find(w => w.id === id);
-            if (!item) return;
-            
-            const c = document.getElementById('wishlist-detail-content');
-            c.innerHTML = `
+            const item = data.wishlist.find(w => w.id === id); if (!item) return;
+            document.getElementById('wishlist-detail-content').innerHTML = `
                 <div class="mb-4 pt-2">
-                    ${item.completed ? '<span class="text-xs bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg font-medium mb-3 inline-block">購入済み</span>' : ''}
-                    <h3 class="text-xl font-bold">${escapeHTML(item.item)}</h3>
+                    ${item.completed ? '<span class="text-xs bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg font-bold mb-3 inline-block">購入済み</span>' : ''}
+                    <h3 class="text-xl font-bold text-zinc-800">${escapeHTML(item.item)}</h3>
                 </div>
                 <div class="bg-zinc-50 rounded-2xl p-4 mb-4 border border-zinc-100">
-                    <div class="text-xs text-zinc-500 mb-1">予想価格</div>
-                    <div class="text-xl font-mono font-semibold mb-3">¥${item.expectedPrice.toLocaleString()}</div>
-                    <div class="text-xs text-zinc-500 flex items-center gap-x-2">優先度: <span class="font-medium text-zinc-700">${item.priority===3?'高':item.priority===2?'中':'低'}</span></div>
+                    <div class="text-[10px] font-bold text-zinc-400 mb-1 uppercase">予想価格</div>
+                    <div class="text-2xl font-mono font-black mb-3 text-zinc-700">¥${item.expectedPrice.toLocaleString()}</div>
+                    <div class="text-xs text-zinc-500 flex items-center gap-x-2 font-bold">優先度: <span class="text-zinc-700">${item.priority===3?'高':item.priority===2?'中':'低'}</span></div>
                 </div>
-                ${item.url ? `<a href="${escapeHTML(item.url)}" target="_blank" class="flex justify-center items-center gap-x-2 w-full py-3.5 mb-6 bg-pink-50 text-pink-600 rounded-xl font-medium text-sm hover:bg-pink-100 transition"><i class="fa-solid fa-external-link-alt"></i> 商品ページを見る</a>` : ''}
-                
+                ${item.url ? `<a href="${escapeHTML(item.url)}" target="_blank" class="flex justify-center items-center gap-x-2 w-full py-3.5 mb-6 bg-pink-50 text-pink-600 rounded-xl font-bold text-sm hover:bg-pink-100 transition"><i class="fa-solid fa-external-link-alt"></i> 商品ページを見る</a>` : ''}
                 <div class="grid grid-cols-2 gap-3 pt-4 border-t border-zinc-100">
-                    <button onclick="showWishlistEditModal('${id}')" class="py-3 bg-zinc-100 text-zinc-700 rounded-2xl text-sm font-semibold hover:bg-zinc-200 transition">編集する</button>
-                    ${!item.completed ? `<button onclick="markWishlistPurchased('${id}')" class="py-3 bg-emerald-500 text-white rounded-2xl text-sm font-semibold hover:bg-emerald-600 transition shadow-sm">購入済みにする</button>` : `<button onclick="deleteWishlistItem('${id}')" class="py-3 text-red-500 border border-red-200 rounded-2xl text-sm font-semibold hover:bg-red-50 transition">削除する</button>`}
-                </div>
-            `;
-            const m = document.getElementById('wishlist-detail-modal');
-            m.classList.remove('hidden'); m.classList.add('flex');
+                    <button onclick="showWishlistEditModal('${id}')" class="py-3 bg-zinc-100 text-zinc-700 rounded-2xl text-sm font-bold hover:bg-zinc-200 transition">編集する</button>
+                    ${!item.completed ? `<button onclick="markWishlistPurchased('${id}')" class="py-3 bg-emerald-500 text-white rounded-2xl text-sm font-bold hover:bg-emerald-600 transition shadow-sm">購入済みにする</button>` : `<button onclick="deleteWishlistItem('${id}')" class="py-3 text-red-500 border border-red-100 bg-red-50 rounded-2xl text-sm font-bold hover:bg-red-100 transition">削除する</button>`}
+                </div>`;
+            document.getElementById('wishlist-detail-modal').classList.remove('hidden'); document.getElementById('wishlist-detail-modal').classList.add('flex');
         }
-        function hideWishlistDetailModal() {
-            document.getElementById('wishlist-detail-modal').classList.remove('flex');
-            document.getElementById('wishlist-detail-modal').classList.add('hidden');
-        }
-
+        function hideWishlistDetailModal() { document.getElementById('wishlist-detail-modal').classList.remove('flex'); document.getElementById('wishlist-detail-modal').classList.add('hidden'); }
         function markWishlistPurchased(id) {
-            const item = data.wishlist.find(w => w.id === id);
-            item.completed = true;
-            if (confirm('購入済みとして「活動」にも記録しますか？')) {
-                data.activities.push({
-                    id: 'act_' + Date.now(), oshiId: currentOshiId, date: new Date().toISOString().split('T')[0],
-                    type: 'グッズ購入', title: item.item, amount: item.expectedPrice, memo: 'ウィッシュリストから購入', rating: 5, isPlanned: false
-                });
+            const item = data.wishlist.find(w => w.id === id); item.completed = true;
+            if (confirm('購入済みとして「活動記録」にも予定を追加しますか？')) {
+                data.activities.push({ id: 'act_' + Date.now(), oshiId: currentOshiId, date: new Date().toISOString().split('T')[0], type: 'グッズ購入', title: item.item, amounts: {ticket:0,hotel:0,transport:0,other:item.expectedPrice}, memo: 'ウィッシュリストから購入', rating: 5, isPlanned: true, links:[] });
             }
             saveData(); hideWishlistDetailModal(); renderWishlist(); showToast('購入済みにしました！');
         }
-        function deleteWishlistItem(id) {
-            if (!confirm('削除しますか？')) return;
-            data.wishlist = data.wishlist.filter(w => w.id !== id);
-            saveData(); hideWishlistDetailModal(); renderWishlist();
-        }
+        function deleteWishlistItem(id) { if (!confirm('削除しますか？')) return; data.wishlist = data.wishlist.filter(w => w.id !== id); saveData(); hideWishlistDetailModal(); renderWishlist(); }
 
-        // ===== Stats Charts =====
+        /* ===== LINKS ===== */
+        function renderLinks() {
+            const c = document.getElementById('links-list'); c.innerHTML = ''; const cl = (data.links || []).filter(l => l.oshiId === currentOshiId);
+            if (!cl.length) { c.innerHTML = `<div class="bg-white border border-dashed border-zinc-200 rounded-3xl p-8 text-center text-zinc-400 font-bold text-sm">まだリンクがありません</div>`; return; }
+            cl.forEach(l => {
+                const div = document.createElement('div'); div.className = 'bg-white border border-zinc-100 rounded-2xl p-4 flex items-center justify-between shadow-sm';
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <a href="${escapeHTML(l.url)}" target="_blank" class="font-bold text-pink-600 hover:underline flex items-center gap-x-2 w-fit text-sm">
+                            <span class="truncate">${escapeHTML(l.title)}</span><i class="fa-solid fa-external-link-alt text-[10px]"></i>
+                        </a>
+                        ${l.memo ? `<div class="text-[11px] font-medium text-zinc-500 mt-1 truncate">${escapeHTML(l.memo)}</div>` : ''}
+                    </div>
+                    <div class="flex gap-x-1 ml-4 flex-shrink-0">
+                        <button onclick="showLinkModal('${l.id}', event)" class="text-zinc-400 hover:text-pink-600 p-2 transition-colors"><i class="fa-solid fa-edit"></i></button>
+                        <button onclick="deleteLink('${l.id}', event)" class="text-zinc-300 hover:text-red-500 p-2 transition-colors"><i class="fa-solid fa-trash"></i></button>
+                    </div>`; c.appendChild(div);
+            });
+        }
+        function showLinkModal(id = null, e = null) {
+            if (e) e.stopImmediatePropagation(); editingLinkId = id;
+            if (id) { const l = data.links.find(x => x.id === id); document.getElementById('link-modal-title').textContent = 'リンクを編集'; document.getElementById('link-title').value = l.title; document.getElementById('link-url').value = l.url; document.getElementById('link-memo').value = l.memo || ''; }
+            else { document.getElementById('link-modal-title').textContent = 'リンクを追加'; document.getElementById('link-title').value = ''; document.getElementById('link-url').value = ''; document.getElementById('link-memo').value = ''; }
+            document.getElementById('link-modal').classList.remove('hidden'); document.getElementById('link-modal').classList.add('flex');
+        }
+        function hideLinkModal() { document.getElementById('link-modal').classList.remove('flex'); document.getElementById('link-modal').classList.add('hidden'); editingLinkId = null; }
+        function saveLink() {
+            const t = document.getElementById('link-title').value.trim(); const u = document.getElementById('link-url').value.trim(); const m = document.getElementById('link-memo').value.trim();
+            if (!t || !u) return alert('タイトルとURLは必須です');
+            if (editingLinkId) { const l = data.links.find(x => x.id === editingLinkId); if (l) { l.title = t; l.url = u; l.memo = m; showToast('リンクを更新しました'); } }
+            else { data.links.push({ id: 'link_' + Date.now(), oshiId: currentOshiId, title: t, url: u, memo: m }); showToast('リンクを追加しました'); }
+            saveData(); hideLinkModal(); renderLinks();
+        }
+        function deleteLink(id, e) { e.stopImmediatePropagation(); if (!confirm('削除しますか？')) return; data.links = data.links.filter(l => l.id !== id); saveData(); renderLinks(); }
+
+        /* ===== STATS ===== */
         function renderStats() {
             const acts = data.activities.filter(a => a.oshiId === currentOshiId && !a.isPlanned);
             document.getElementById('stats-total-count').textContent = acts.length;
-            document.getElementById('stats-total-spent').innerHTML = `¥${acts.reduce((s, a) => s + a.amount, 0).toLocaleString()}`;
+            document.getElementById('stats-total-spent').innerHTML = `¥${acts.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString()}`;
             document.getElementById('stats-avg-rating').innerHTML = `${acts.length ? (acts.reduce((s, a) => s + a.rating, 0)/acts.length).toFixed(1) : 0} <span class="text-base ml-1 text-yellow-500">★</span>`;
             document.getElementById('stats-oshi-days').textContent = getCurrentOshi() ? Math.ceil((new Date() - new Date(getCurrentOshi().started))/(1000*3600*24)) : 0;
             
             if(monthlyChart) monthlyChart.destroy();
-            const md = {};
-            acts.forEach(a => { const k = a.date.substring(0,7); md[k] = (md[k]||0)+a.amount; });
+            const md = {}; acts.forEach(a => { const k = a.date.substring(0,7); md[k] = (md[k]||0)+getTotalAmount(a.amounts); });
             const sKeys = Object.keys(md).sort();
-            monthlyChart = new Chart(document.getElementById('monthly-chart'), {
-                type: 'bar', data: { labels: sKeys.map(k=>k.split('-')[1]+'月'), datasets: [{data: sKeys.map(k=>md[k]), backgroundColor:'#f9a8d4', borderRadius:6}] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}} }
-            });
+            monthlyChart = new Chart(document.getElementById('monthly-chart'), { type: 'bar', data: { labels: sKeys.map(k=>k.split('-')[1]+'月'), datasets: [{data: sKeys.map(k=>md[k]), backgroundColor:'#f9a8d4', borderRadius:8}] }, options: { responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}} } });
 
             if(typePieChart) typePieChart.destroy();
-            const tc = {};
-            acts.forEach(a => tc[a.type] = (tc[a.type]||0)+1);
-            typePieChart = new Chart(document.getElementById('type-pie-chart'), {
-                type: 'doughnut', data: { labels: Object.keys(tc), datasets: [{data: Object.values(tc), backgroundColor: ['#f9a8d4','#c026d3','#f472b6','#e11d8c','#db2777','#9f1239'], borderWidth:2, borderColor:'#fff'}] },
-                options: { responsive: true, maintainAspectRatio: false, cutout:'68%', plugins: {legend:{position:'bottom'}} }
-            });
+            const tc = {}; acts.forEach(a => tc[a.type] = (tc[a.type]||0)+getTotalAmount(a.amounts)); // 金額ベースに変更
+            typePieChart = new Chart(document.getElementById('type-pie-chart'), { type: 'doughnut', data: { labels: Object.keys(tc), datasets: [{data: Object.values(tc), backgroundColor: ['#f9a8d4','#c026d3','#f472b6','#e11d8c','#db2777','#9f1239', '#fda4af', '#f43f5e', '#be123c', '#881337'], borderWidth:3, borderColor:'#fff'}] }, options: { responsive: true, maintainAspectRatio: false, cutout:'70%', plugins: {legend:{position:'bottom', labels:{font:{family:'Inter'}}}} } });
         }
 
-        // ===== Settings & Init =====
+        /* ===== SETTINGS ===== */
         let pendingOshiImage = null;
         function loadOshiSettings() {
             const o = getCurrentOshi();
-            document.getElementById('edit-oshi-name').value = o.name||'';
-            document.getElementById('edit-oshi-group').value = o.group||'';
-            document.getElementById('edit-oshi-birthday').value = o.birthday||'';
-            document.getElementById('edit-oshi-started').value = o.started||'';
-            document.getElementById('edit-oshi-color').value = o.color||'#ec4899';
-            document.getElementById('edit-oshi-emoji').value = o.emoji||'❤️';
-            
+            document.getElementById('edit-oshi-name').value = o.name||''; document.getElementById('edit-oshi-group').value = o.group||''; document.getElementById('edit-oshi-birthday').value = o.birthday||'';
+            document.getElementById('edit-oshi-started').value = o.started||''; document.getElementById('edit-oshi-color').value = o.color||'#ec4899'; document.getElementById('edit-oshi-emoji').value = o.emoji||'❤️';
             const prev = document.getElementById('oshi-image-preview');
-            if(o.iconImage) {
-                document.getElementById('oshi-image-preview-img').src = o.iconImage;
-                prev.classList.remove('hidden');
-            } else { prev.classList.add('hidden'); }
+            if(o.iconImage) { document.getElementById('oshi-image-preview-img').src = o.iconImage; prev.classList.remove('hidden'); } else { prev.classList.add('hidden'); }
         }
         function previewOshiImage(input) {
             if(input.files && input.files[0]) {
+                const file = input.files[0];
                 const r = new FileReader();
-                r.onload = e => { pendingOshiImage = e.target.result; document.getElementById('oshi-image-preview-img').src = pendingOshiImage; document.getElementById('oshi-image-preview').classList.remove('hidden'); };
-                r.readAsDataURL(input.files[0]);
+                r.onload = e => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        // リサイズ後のサイズ (例: 256x256)
+                        const targetSize = 256;
+                        canvas.width = targetSize;
+                        canvas.height = targetSize;
+                        
+                        // 中央で正方形にクロップするための計算
+                        const minDim = Math.min(img.width, img.height);
+                        const sx = (img.width - minDim) / 2;
+                        const sy = (img.height - minDim) / 2;
+                        
+                        // 描画
+                        ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, targetSize, targetSize);
+                        
+                        // 容量削減と透過維持のためWebP形式で圧縮 (品質0.8)
+                        pendingOshiImage = canvas.toDataURL('image/webp', 0.8);
+                        
+                        document.getElementById('oshi-image-preview-img').src = pendingOshiImage;
+                        document.getElementById('oshi-image-preview').classList.remove('hidden');
+                    };
+                    img.src = e.target.result;
+                };
+                r.readAsDataURL(file);
             }
         }
-        function removeOshiImage() {
-            const o = getCurrentOshi();
-            if(confirm('画像を削除しますか？')) { o.iconImage=null; pendingOshiImage=null; saveData(); loadOshiSettings(); }
-        }
+        function removeOshiImage() { if(confirm('画像を削除しますか？')) { const o = getCurrentOshi(); o.iconImage=null; pendingOshiImage=null; saveData(); loadOshiSettings(); } }
         function saveOshiSettings() {
-            const o = getCurrentOshi();
-            o.name = document.getElementById('edit-oshi-name').value||o.name;
-            o.group = document.getElementById('edit-oshi-group').value;
-            o.birthday = document.getElementById('edit-oshi-birthday').value;
-            o.started = document.getElementById('edit-oshi-started').value;
-            o.color = document.getElementById('edit-oshi-color').value;
-            o.emoji = document.getElementById('edit-oshi-emoji').value||'❤️';
+            const o = getCurrentOshi(); o.name = document.getElementById('edit-oshi-name').value||o.name; o.group = document.getElementById('edit-oshi-group').value; o.birthday = document.getElementById('edit-oshi-birthday').value; o.started = document.getElementById('edit-oshi-started').value; o.color = document.getElementById('edit-oshi-color').value; o.emoji = document.getElementById('edit-oshi-emoji').value||'❤️';
             if(pendingOshiImage) { o.iconImage = pendingOshiImage; pendingOshiImage = null; }
             saveData(); refreshAll(); showToast('更新しました');
         }
         function deleteCurrentOshi() {
-            if(data.oshis.length<=1) return alert('最後の推しは削除できません');
-            if(!confirm('推しと関連データを全て削除しますか？')) return;
-            data.oshis = data.oshis.filter(o=>o.id!==currentOshiId);
-            data.activities = data.activities.filter(a=>a.oshiId!==currentOshiId);
-            data.wishlist = data.wishlist.filter(w=>w.oshiId!==currentOshiId);
-            data.links = data.links.filter(l=>l.oshiId!==currentOshiId);
-            currentOshiId = data.oshis[0].id;
-            saveData(); refreshAll(); showSection('home');
+            if(data.oshis.length<=1) return alert('最後の推しは削除できません'); if(!confirm('推しと関連データを全て削除しますか？')) return;
+            data.oshis = data.oshis.filter(o=>o.id!==currentOshiId); data.activities = data.activities.filter(a=>a.oshiId!==currentOshiId); data.wishlist = data.wishlist.filter(w=>w.oshiId!==currentOshiId); data.links = data.links.filter(l=>l.oshiId!==currentOshiId); data.lotteries = data.lotteries.filter(l=>l.oshiId!==currentOshiId);
+            currentOshiId = data.oshis[0].id; saveData(); refreshAll(); showSection('home');
         }
         function showAddOshiModal() {
-            const n = prompt('新しい推しの名前','');
-            if(!n) return;
+            const n = prompt('新しい推しの名前',''); if(!n) return;
             const newO = {id:'oshi_'+Date.now(), name:n, group:'', birthday:'', started:new Date().toISOString().split('T')[0], color:'#ec4899', emoji:'❤️'};
-            data.oshis.push(newO); currentOshiId = newO.id;
-            saveData(); updateOshiSelector(); refreshAll(); showSection('settings');
+            data.oshis.push(newO); currentOshiId = newO.id; saveData(); updateOshiSelector(); refreshAll(); showSection('settings');
         }
         
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 2500);
+        function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-message').textContent = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3000); }
+        function refreshAll() { updateOshiSelector(); renderHome(); renderLogs(); renderLotteries(); renderWishlist(); renderLinks(); if(document.getElementById('section-stats').classList.contains('active')) renderStats(); }
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const imported = JSON.parse(ev.target.result);
+                    if (imported && Array.isArray(imported.oshis) && Array.isArray(imported.activities)) {
+                        if(confirm('現在のデータはすべて上書きされます。インポートを実行しますか？')) {
+                            data = imported;
+                            migrateData();
+                            saveData();
+                            alert('データの復元が完了しました。');
+                            location.reload();
+                        }
+                    } else {
+                        alert('推しログのデータファイルではありません。');
+                    }
+                } catch (err) {
+                    alert('ファイルの読み込みに失敗しました。');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
         }
-        function refreshAll() {
-            updateOshiSelector(); renderHome(); renderLogs(); renderWishlist(); renderLinks();
-            if(document.getElementById('section-stats').classList.contains('active')) renderStats();
-        }
-        function exportData() {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], {type:'application/json'}));
-            a.download = `oshilog_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-        }
-        function clearAllData() {
-            if(confirm('全てのデータを削除し初期化しますか？')) { localStorage.removeItem('oshilog_data'); location.reload(); }
-        }
+        function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], {type:'application/json'})); a.download = `oshilog_v3_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
+        function clearAllData() { if(confirm('全てのデータを削除し初期化しますか？')) { localStorage.removeItem('oshilog_data_v3'); location.reload(); } }
         
-        window.onload = () => {
-            loadData(); setupRatingStars();
-            document.getElementById('activity-date').value = new Date().toISOString().split('T')[0];
-            refreshAll(); showSection('home');
-        };
+        window.onload = () => { loadData(); setupRatingStars(); document.getElementById('activity-date').value = new Date().toISOString().split('T')[0]; refreshAll(); showSection('home'); };
     </script>
 </body>
 </html>
