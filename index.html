@@ -28,7 +28,6 @@
     </style>
 </head>
 <body class="bg-zinc-50 text-zinc-800">
-    <!-- Header -->
     <header class="bg-white border-b border-zinc-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-x-3">
@@ -55,10 +54,8 @@
 
     <div class="max-w-5xl mx-auto px-4 py-6 pb-28">
         
-        <!-- HOME SECTION -->
         <div id="section-home" class="section active">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Oshi Profile -->
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-zinc-100 h-full relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-pink-50 rounded-bl-full -z-10 opacity-50"></div>
@@ -86,7 +83,6 @@
                     </div>
                 </div>
                 
-                <!-- Quick Stats -->
                 <div class="lg:col-span-7">
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 h-full">
                         <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
@@ -95,7 +91,7 @@
                         </div>
                         <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
                             <div class="text-xs text-zinc-500 mb-1 font-medium">総支出</div>
-                            <div class="flex items-baseline gap-x-1"><div id="stat-total-spent" class="text-3xl font-bold metric-value">0</div><div class="text-rose-500 text-xs font-bold">円</div></div>
+                            <div class="flex items-baseline gap-x-1"><div id="stat-month-total-spent" class="text-3xl font-bold metric-value">0</div><div class="text-rose-500 text-xs font-bold">円</div></div>
                         </div>
                         <div class="bg-white rounded-3xl p-5 border border-zinc-100 shadow-sm flex flex-col justify-center">
                             <div class="text-xs text-zinc-500 mb-1 font-medium">今月の活動</div>
@@ -108,7 +104,6 @@
                     </div>
                 </div>
                 
-                <!-- Recent Activities -->
                 <div class="lg:col-span-12 mt-2">
                     <div class="flex items-center justify-between mb-4 px-1">
                         <h3 class="font-bold text-lg flex items-center gap-x-2 text-zinc-800">
@@ -123,7 +118,6 @@
             </div>
         </div>
         
-        <!-- ADD ACTIVITY SECTION -->
         <div id="section-add" class="section">
             <div class="max-w-2xl mx-auto">
                 <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-zinc-100">
@@ -154,7 +148,7 @@
                                 <label for="activity-is-planned" class="text-sm font-bold text-pink-800">これは予定です（未来の活動）</label>
                             </div>
                             
-                            <div class="bg-zinc-50/50 p-5 rounded-3xl border border-zinc-100 transition-opacity duration-200 space-y-5" id="add-details-container">
+                            <div class="bg-zinc-50/50 p-5 rounded-3xl border border-zinc-100 space-y-5" id="add-details-container">
                                 <div class="text-sm font-bold text-zinc-800 border-b border-zinc-200 pb-2 flex items-center gap-x-2">
                                     <i class="fa-solid fa-coins text-zinc-400"></i>支出の内訳（円）
                                 </div>
@@ -178,7 +172,7 @@
                                 </div>
                                 <div class="pt-3 border-t border-zinc-200/60">
                                     <label class="block text-[11px] font-bold text-zinc-500 mb-2 uppercase tracking-wider">満足度</label>
-                                    <div class="flex items-center gap-x-1" id="rating-stars"></div>
+                                    <div class="flex items-center gap-x-1 transition-opacity" id="rating-stars"></div>
                                     <input type="hidden" id="activity-rating" value="5">
                                 </div>
                             </div>
@@ -210,7 +204,6 @@
             </div>
         </div>
         
-        <!-- LOGS SECTION -->
         <div id="section-logs" class="section">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-y-3 mb-5 px-1">
                 <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
@@ -230,7 +223,6 @@
             </div>
         </div>
         
-        <!-- LOTTERIES SECTION (当落管理) -->
         <div id="section-lotteries" class="section">
             <div class="flex items-center justify-between mb-5 px-1">
                 <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
@@ -241,7 +233,6 @@
                 </button>
             </div>
 
-            <!-- Dashboard -->
             <div class="bg-white p-5 rounded-3xl mb-5 border border-zinc-100 shadow-sm">
                 <div class="grid grid-cols-3 gap-3 mb-4">
                     <select id="lottery-filter-year" onchange="renderLotteries()" class="w-full px-3 py-2 text-xs font-bold bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-200"></select>
@@ -257,26 +248,25 @@
             <div id="lotteries-list" class="space-y-3 pb-4"></div>
         </div>
 
-        <!-- STATS SECTION -->
         <div id="section-stats" class="section">
             <h2 class="text-xl font-bold mb-5 px-1 flex items-center gap-x-2 text-zinc-800">
                 <i class="fa-solid fa-chart-line text-pink-500"></i><span>推し活統計</span>
             </h2>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
+                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm flex flex-col justify-center">
                     <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">総実績回数</div>
                     <div id="stats-total-count" class="text-4xl font-black mt-1 metric-value text-zinc-800">0</div>
                 </div>
-                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
-                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">総支出額</div>
-                    <div id="stats-total-spent" class="text-3xl sm:text-4xl font-black mt-1 text-rose-600 metric-value truncate">¥0</div>
+                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm flex flex-col justify-center">
+                    <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider mb-1">総支出額</div>
+                    <div id="stats-total-spent" class="w-full"></div>
                 </div>
-                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
+                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm flex flex-col justify-center">
                     <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">平均満足度</div>
                     <div id="stats-avg-rating" class="text-4xl font-black mt-1 flex items-baseline text-zinc-800">0 <span class="text-base ml-1 text-yellow-500">★</span></div>
                 </div>
-                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm">
+                <div class="bg-white p-5 rounded-3xl border border-zinc-100 shadow-sm flex flex-col justify-center">
                     <div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">推し活日数</div>
                     <div id="stats-oshi-days" class="text-4xl font-black mt-1 metric-value text-zinc-800">0</div>
                 </div>
@@ -298,7 +288,6 @@
             </div>
         </div>
         
-        <!-- WISHLIST SECTION -->
         <div id="section-wishlist" class="section">
             <div class="flex items-center justify-between mb-5 px-1">
                 <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
@@ -311,7 +300,6 @@
             <div id="wishlist-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
         
-        <!-- LINKS SECTION -->
         <div id="section-links" class="section">
             <div class="flex items-center justify-between mb-5 px-1">
                 <h2 class="text-xl font-bold flex items-center gap-x-2 text-zinc-800">
@@ -324,7 +312,6 @@
             <div id="links-list" class="space-y-3"></div>
         </div>
         
-        <!-- SETTINGS SECTION -->
         <div id="section-settings" class="section max-w-xl mx-auto">
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-100 shadow-sm">
                 <h2 class="text-xl font-bold mb-6 text-zinc-800">推し情報の編集</h2>
@@ -393,8 +380,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
-    <!-- Lottery Add/Edit Modal -->
     <div id="lottery-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
         <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal shadow-2xl">
             <h3 class="font-bold text-xl mb-5 text-zinc-800 flex items-center gap-x-2"><i class="fa-solid fa-ticket text-pink-500"></i><span id="lottery-modal-title">当落の登録</span></h3>
@@ -435,7 +420,6 @@
         </div>
     </div>
 
-    <!-- Other Modals (Link, Wishlist, Activity Detail) -->
     <div id="link-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[100] px-4 backdrop-blur-sm transition-opacity">
         <div class="bg-white rounded-3xl w-full max-w-md p-6 sm:p-8 modal shadow-2xl">
             <h3 class="font-bold text-xl mb-5" id="link-modal-title">リンクを追加</h3>
@@ -477,12 +461,10 @@
         </div>
     </div>
     
-    <!-- Toast -->
     <div id="toast" class="hidden fixed bottom-28 left-1/2 -translate-x-1/2 bg-zinc-800 text-white text-sm font-bold px-6 py-3.5 rounded-full shadow-xl flex items-center gap-x-2 z-[200] transition-opacity">
         <i class="fa-solid fa-circle-check text-pink-400 text-lg"></i><span id="toast-message"></span>
     </div>
 
-    <!-- Bottom Navigation -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-zinc-200/80 z-[65] pb-safe">
         <div class="max-w-5xl mx-auto">
             <div class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory items-center h-[68px] px-1 text-xs justify-between sm:justify-start">
@@ -633,7 +615,7 @@
             const monthActs = oshiActs.filter(a => new Date(a.date).getMonth() === thisMonth && new Date(a.date).getFullYear() === thisYear);
             
             document.getElementById('stat-total-activities').textContent = oshiActs.length;
-            document.getElementById('stat-total-spent').textContent = oshiActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString();
+            document.getElementById('stat-month-total-spent').textContent = oshiActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString();
             document.getElementById('stat-month-activities').textContent = monthActs.length;
             document.getElementById('stat-month-spent').textContent = monthActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString();
             
@@ -658,7 +640,8 @@
                         <div class="text-[10px] px-2 py-0.5 bg-zinc-100 text-zinc-500 font-bold w-fit rounded mt-1.5">${escapeHTML(act.type)}</div>
                     </div>
                     <div class="text-right flex-shrink-0">
-                        ${!act.isPlanned ? `<div class="font-mono text-xs font-bold text-pink-700">${getTotalAmount(act.amounts).toLocaleString()}円</div><div class="mt-1">${stars}</div>` : ''}
+                        <div class="font-mono text-xs font-bold ${!act.isPlanned ? 'text-pink-700' : 'text-orange-500'}">${getTotalAmount(act.amounts).toLocaleString()}円</div>
+                        ${!act.isPlanned ? `<div class="mt-1">${stars}</div>` : ''}
                     </div>
                 </div>`;
             return div;
@@ -666,8 +649,11 @@
 
         /* ===== ADD ACTIVITY ===== */
         function togglePlannedMode(isPlanned, prefix) {
-            const c = document.getElementById(`${prefix}-details-container`); if (!c) return;
-            if (isPlanned) { c.style.opacity = '0.3'; c.style.pointerEvents = 'none'; } else { c.style.opacity = '1'; c.style.pointerEvents = 'auto'; }
+            const stars = prefix === 'add' ? document.getElementById('rating-stars') : document.getElementById('edit-act-stars');
+            if (stars) {
+                if (isPlanned) { stars.style.opacity = '0.3'; stars.style.pointerEvents = 'none'; } 
+                else { stars.style.opacity = '1'; stars.style.pointerEvents = 'auto'; }
+            }
         }
         function setupRatingStars() {
             const c = document.getElementById('rating-stars'); c.innerHTML = '';
@@ -698,7 +684,7 @@
             const date = document.getElementById('activity-date').value; const type = document.getElementById('activity-type').value; const title = document.getElementById('activity-title').value.trim();
             if (!date || !type || !title) return;
             const isPlanned = document.getElementById('activity-is-planned').checked;
-            const amounts = isPlanned ? { ticket:0, hotel:0, transport:0, other:0 } : {
+            const amounts = {
                 ticket: parseInt(document.getElementById('act-amt-ticket').value)||0, hotel: parseInt(document.getElementById('act-amt-hotel').value)||0,
                 transport: parseInt(document.getElementById('act-amt-transport').value)||0, other: parseInt(document.getElementById('act-amt-other').value)||0
             };
@@ -739,7 +725,7 @@
                             <div class="text-[10px] mt-1 text-zinc-500 font-medium">${escapeHTML(act.type)}</div>
                         </div>
                         <div class="flex items-start gap-x-3 text-right flex-shrink-0">
-                            ${!act.isPlanned ? `<div class="font-mono text-sm font-bold text-pink-700 mt-1">${getTotalAmount(act.amounts).toLocaleString()}円</div>` : ''}
+                            <div class="font-mono text-sm font-bold ${!act.isPlanned ? 'text-pink-700' : 'text-orange-500'} mt-1">${getTotalAmount(act.amounts).toLocaleString()}円</div>
                             <button class="text-zinc-300 hover:text-red-500 p-2 z-10 transition-colors" onclick="deleteActivity('${act.id}', event)"><i class="fa-solid fa-trash text-sm"></i></button>
                         </div>
                     </div> ${lH}
@@ -772,7 +758,6 @@
                 <h3 class="text-xl font-bold mb-2 text-zinc-800">${escapeHTML(act.title)}</h3>
                 <div class="text-xs font-bold text-zinc-400 mb-6 flex items-center gap-x-2"><i class="fa-solid fa-tag"></i> ${escapeHTML(act.type)}</div>
                 
-                ${!act.isPlanned ? `
                 <div class="bg-pink-50/50 rounded-2xl p-4 mb-6 border border-pink-100">
                     <div class="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-wider border-b border-pink-100 pb-2">支出の内訳</div>
                     <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-3">
@@ -783,23 +768,19 @@
                     </div>
                     <div class="flex items-end justify-between pt-3 border-t border-pink-100">
                         <div class="text-[10px] font-bold text-zinc-500">合計</div>
-                        <div class="text-2xl font-black text-pink-600 font-mono">¥${getTotalAmount(act.amounts).toLocaleString()}</div>
+                        <div class="text-2xl font-black ${!act.isPlanned ? 'text-pink-600' : 'text-orange-500'} font-mono">¥${getTotalAmount(act.amounts).toLocaleString()}</div>
                     </div>
                 </div>
-                <div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">満足度</div><div class="text-sm">${stars}</div></div>` : ''}
+                
+                ${!act.isPlanned ? `<div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">満足度</div><div class="text-sm">${stars}</div></div>` : '<div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">満足度</div><div class="text-xs text-zinc-400 font-bold">予定のため未評価</div></div>'}
                 
                 ${act.memo ? `<div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">メモ</div><div class="bg-zinc-50 p-4 rounded-2xl text-zinc-700 whitespace-pre-wrap leading-relaxed text-sm font-medium border border-zinc-100">${escapeHTML(act.memo)}</div></div>` : ''}
                 ${lH ? `<div class="mb-6"><div class="text-[10px] font-bold text-zinc-400 mb-2 uppercase">リンク</div>${lH}</div>` : ''}
 
                 <div class="pt-6 text-center">
                     <button onclick="renderActivityDetailEditMode()" class="w-full py-3.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-2xl font-bold transition flex items-center justify-center gap-x-2"><i class="fa-solid fa-edit"></i> 編集する</button>
-                    ${act.isPlanned ? `<button onclick="markActivityAsDone()" class="w-full py-3.5 mt-3 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-bold transition flex items-center justify-center gap-x-2 shadow-sm shadow-pink-200"><i class="fa-solid fa-check"></i> 実績として確定する</button>` : ''}
                 </div>
             `;
-        }
-        function markActivityAsDone() {
-            const act = data.activities.find(a => a.id === editingActivityId);
-            if(act) { act.isPlanned = false; saveData(); renderActivityDetailEditMode(); showToast('実績として確定しました。金額等を入力してください'); }
         }
         function renderActivityDetailEditMode() {
             const act = data.activities.find(a => a.id === editingActivityId); if (!act) return;
@@ -819,7 +800,7 @@
                         <label for="edit-act-planned" class="text-sm font-bold text-pink-800">これは予定です</label>
                     </div>
 
-                    <div class="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 space-y-4 transition-opacity duration-200" id="edit-details-container" style="${act.isPlanned?'opacity:0.3; pointer-events:none;':''}">
+                    <div class="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 space-y-4 transition-opacity duration-200" id="edit-details-container">
                         <div class="text-xs font-bold text-zinc-500 uppercase tracking-wider border-b border-zinc-200 pb-2">支出の内訳</div>
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">チケット代等</label><input type="number" id="edit-act-ticket" value="${act.amounts?.ticket||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
@@ -827,7 +808,7 @@
                             <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">交通費</label><input type="number" id="edit-act-transport" value="${act.amounts?.transport||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
                             <div><label class="text-[10px] font-bold text-zinc-500 mb-1 block">その他</label><input type="number" id="edit-act-other" value="${act.amounts?.other||0}" class="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-pink-200 outline-none"></div>
                         </div>
-                        <div class="pt-2"><label class="text-xs font-bold text-zinc-500 mb-2 block">満足度</label><div class="flex items-center gap-x-1" id="edit-act-stars">${stars}</div><input type="hidden" id="edit-act-rating" value="${act.rating}"></div>
+                        <div class="pt-2"><label class="text-xs font-bold text-zinc-500 mb-2 block">満足度</label><div class="flex items-center gap-x-1 transition-opacity" id="edit-act-stars" style="${act.isPlanned?'opacity:0.3; pointer-events:none;':''}">${stars}</div><input type="hidden" id="edit-act-rating" value="${act.rating}"></div>
                     </div>
                     
                     <div><label class="text-xs font-bold text-zinc-500 mb-1.5 block">メモ</label><textarea id="edit-act-memo" rows="3" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm resize-y focus:ring-2 focus:ring-pink-200 outline-none">${escapeHTML(act.memo||'')}</textarea></div>
@@ -858,7 +839,7 @@
             const act = data.activities.find(a => a.id === editingActivityId); if(!act) return;
             act.date = document.getElementById('edit-act-date').value; act.type = document.getElementById('edit-act-type').value; act.title = document.getElementById('edit-act-title').value.trim();
             act.isPlanned = document.getElementById('edit-act-planned').checked;
-            act.amounts = act.isPlanned ? {ticket:0,hotel:0,transport:0,other:0} : { ticket:parseInt(document.getElementById('edit-act-ticket').value)||0, hotel:parseInt(document.getElementById('edit-act-hotel').value)||0, transport:parseInt(document.getElementById('edit-act-transport').value)||0, other:parseInt(document.getElementById('edit-act-other').value)||0 };
+            act.amounts = { ticket:parseInt(document.getElementById('edit-act-ticket').value)||0, hotel:parseInt(document.getElementById('edit-act-hotel').value)||0, transport:parseInt(document.getElementById('edit-act-transport').value)||0, other:parseInt(document.getElementById('edit-act-other').value)||0 };
             act.rating = act.isPlanned ? 5 : parseInt(document.getElementById('edit-act-rating').value);
             act.memo = document.getElementById('edit-act-memo').value.trim(); act.links = JSON.parse(JSON.stringify(editingActivityLinksTemp));
             saveData(); refreshAll(); renderActivityDetailReadOnly(); showToast('更新しました');
@@ -1106,20 +1087,75 @@
 
         /* ===== STATS ===== */
         function renderStats() {
-            const acts = data.activities.filter(a => a.oshiId === currentOshiId && !a.isPlanned);
-            document.getElementById('stats-total-count').textContent = acts.length;
-            document.getElementById('stats-total-spent').innerHTML = `¥${acts.reduce((s, a) => s + getTotalAmount(a.amounts), 0).toLocaleString()}`;
-            document.getElementById('stats-avg-rating').innerHTML = `${acts.length ? (acts.reduce((s, a) => s + a.rating, 0)/acts.length).toFixed(1) : 0} <span class="text-base ml-1 text-yellow-500">★</span>`;
+            const acts = data.activities.filter(a => a.oshiId === currentOshiId);
+            const actualActs = acts.filter(a => !a.isPlanned);
+            const plannedActs = acts.filter(a => a.isPlanned);
+            
+            const actualTotal = actualActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0);
+            const plannedTotal = plannedActs.reduce((s, a) => s + getTotalAmount(a.amounts), 0);
+
+            document.getElementById('stats-total-count').textContent = actualActs.length;
+            document.getElementById('stats-total-spent').innerHTML = `<div class="text-3xl sm:text-4xl font-black text-rose-600 metric-value truncate">¥${actualTotal.toLocaleString()}<span class="text-sm ml-1 text-zinc-500 font-bold">(実績)</span></div><div class="text-sm font-bold text-orange-400 mt-1 text-right border-t border-zinc-100 pt-1">＋ ¥${plannedTotal.toLocaleString()} <span class="text-[10px]">(予定)</span></div>`;
+            document.getElementById('stats-avg-rating').innerHTML = `${actualActs.length ? (actualActs.reduce((s, a) => s + a.rating, 0)/actualActs.length).toFixed(1) : 0} <span class="text-base ml-1 text-yellow-500">★</span>`;
             document.getElementById('stats-oshi-days').textContent = getCurrentOshi() ? Math.ceil((new Date() - new Date(getCurrentOshi().started))/(1000*3600*24)) : 0;
             
             if(monthlyChart) monthlyChart.destroy();
-            const md = {}; acts.forEach(a => { const k = a.date.substring(0,7); md[k] = (md[k]||0)+getTotalAmount(a.amounts); });
-            const sKeys = Object.keys(md).sort();
-            monthlyChart = new Chart(document.getElementById('monthly-chart'), { type: 'bar', data: { labels: sKeys.map(k=>k.split('-')[1]+'月'), datasets: [{data: sKeys.map(k=>md[k]), backgroundColor:'#f9a8d4', borderRadius:8}] }, options: { responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}} } });
+            const mdActual = {}; const mdPlan = {};
+            acts.forEach(a => {
+                const k = a.date.substring(0,7);
+                if(a.isPlanned) {
+                    mdPlan[k] = (mdPlan[k]||0) + getTotalAmount(a.amounts);
+                    mdActual[k] = mdActual[k]||0;
+                } else {
+                    mdActual[k] = (mdActual[k]||0) + getTotalAmount(a.amounts);
+                    mdPlan[k] = mdPlan[k]||0;
+                }
+            });
+            const sKeys = Object.keys(mdActual).sort();
+            monthlyChart = new Chart(document.getElementById('monthly-chart'), { 
+                type: 'bar', 
+                data: { 
+                    labels: sKeys.map(k=>k.split('-')[1]+'月'), 
+                    datasets: [
+                        {label: '実績', data: sKeys.map(k=>mdActual[k]), backgroundColor:'#f9a8d4', borderRadius:4},
+                        {label: '予定', data: sKeys.map(k=>mdPlan[k]), backgroundColor:'#fdba74', borderRadius:4}
+                    ] 
+                }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    scales: { x: { stacked: true }, y: { stacked: true } },
+                    plugins: { legend: { display: true, position: 'top', labels:{font:{family:'Inter'}} } } 
+                } 
+            });
 
             if(typePieChart) typePieChart.destroy();
-            const tc = {}; acts.forEach(a => tc[a.type] = (tc[a.type]||0)+getTotalAmount(a.amounts)); // 金額ベースに変更
-            typePieChart = new Chart(document.getElementById('type-pie-chart'), { type: 'doughnut', data: { labels: Object.keys(tc), datasets: [{data: Object.values(tc), backgroundColor: ['#f9a8d4','#c026d3','#f472b6','#e11d8c','#db2777','#9f1239', '#fda4af', '#f43f5e', '#be123c', '#881337'], borderWidth:3, borderColor:'#fff'}] }, options: { responsive: true, maintainAspectRatio: false, cutout:'70%', plugins: {legend:{position:'bottom', labels:{font:{family:'Inter'}}}} } });
+            const tc = {}; 
+            let planTotalForPie = 0;
+            acts.forEach(a => {
+                if(a.isPlanned) {
+                    planTotalForPie += getTotalAmount(a.amounts);
+                } else {
+                    tc[a.type] = (tc[a.type]||0)+getTotalAmount(a.amounts);
+                }
+            });
+            const pieLabels = Object.keys(tc);
+            const pieData = Object.values(tc);
+            const pieColors = ['#f9a8d4','#c026d3','#f472b6','#e11d8c','#db2777','#9f1239', '#fda4af', '#f43f5e', '#be123c', '#881337'];
+            
+            if (planTotalForPie > 0) {
+                pieLabels.push('予定');
+                pieData.push(planTotalForPie);
+                pieColors.push('#fdba74');
+            }
+
+            typePieChart = new Chart(document.getElementById('type-pie-chart'), { 
+                type: 'doughnut', 
+                data: { 
+                    labels: pieLabels, 
+                    datasets: [{data: pieData, backgroundColor: pieColors.slice(0, pieLabels.length), borderWidth:3, borderColor:'#fff'}] 
+                }, 
+                options: { responsive: true, maintainAspectRatio: false, cutout:'70%', plugins: {legend:{position:'bottom', labels:{font:{family:'Inter'}}}} } 
+            });
         }
 
         /* ===== SETTINGS ===== */
